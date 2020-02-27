@@ -5,8 +5,10 @@
 #include "constantes.h"
 #include "structures.h"
 
-/**
+#include "string.h"
 #include "init.h"
+/**
+
 #include "affichage.h"
 #include "scene.h"
 #include "piece.h"
@@ -18,13 +20,13 @@
 
 int main(){
 
-    char *leFichierP = "../Blokus/pieces.txt";
-    char* leFichierS = "../Blokus/sauvegarde/blokus.data";
+    String leFichierP = str_new("../Blokus/pieces.txt");
+    String leFichierS = str_new("../Blokus/sauvegarde/blokus.data");
 
-    char * leMessage = "";
-    char * leMessageInfo = "";
+    String leMessage = str_new("");
+    String leMessageInfo = str_new("");
 
-    char * laCommande = "";
+    String laCommande = str_new("");
     Case laScene[LIGNE_S][COLONNE_S];
     bool laFin = false;
     bool estUneSauvegarde;
@@ -33,18 +35,18 @@ int main(){
     int laMain;
     bool aJouer;
     
-    //estUneSauvegarde = nbrJoueurs(leNbrJoueurs, leNbrBots);
+    estUneSauvegarde = nbrJoueurs(&leNbrJoueurs, &leNbrBots);
     Joueur lesJoueurs[4];
 
-    //init(laScene);
-    //init(lesJoueurs, leNbrJoueurs, leNbrBots,estUneSauvegarde ,leFichierP);
+    init_Scene(laScene);
+    init_Joueur(lesJoueurs, leNbrJoueurs, leNbrBots,estUneSauvegarde , &leFichierP);
 
     //if(estUneSauvegarde)
-    //    charger(lesJoueurs, leNbrJoueurs, laScene, leFichierP, leFichierS);
+        //charger(lesJoueurs, leNbrJoueurs, laScene, leFichierP, leFichierS);
 
 
     do{
-        //leMessage = "\n";
+        str_set(&leMessage, "\n");
         //laMain = joueurTour(lesJoueurs, leNbrJoueurs, 0);
         //passeLeTour(lesJoueurs, leNbrJoueurs, laMain, laScene, leMessage);
 
@@ -65,7 +67,7 @@ int main(){
             //piecesDansScene(laScene, lesJoueurs, leNbrJoueurs);
             //afficher(laScene);
 
-            printf("%s%s[%s]", "  ", "  ", "JX");
+            printf("%s%s[%s]", leMessageInfo, leMessage, "a");
             
 
             //std::cout<<leMessageInfo;

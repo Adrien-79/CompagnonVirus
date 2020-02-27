@@ -1,15 +1,14 @@
-#include <fstream>
-#include <ctime>
-#include <iostream>
+#include <stdlib.h>
 
 #include "enum.h"
 #include "constantes.h"
 #include "structures.h"
 
+#include "string.h"
 #include "init.h"
 
 
-void init(Case uneScene[LIGNE_S][COLONNE_S]){
+void init_Scene(Case uneScene[LIGNE_S][COLONNE_S]){
 
     for(int laLigne = 0; laLigne < DIM; laLigne++){
         for(int laColonne = 0; laColonne < DIM; laColonne++){
@@ -25,6 +24,7 @@ void init(Case uneScene[LIGNE_S][COLONNE_S]){
         uneScene[lIndex+1][0].sonChar = lIndex + 'A'-1;
     }
 
+    /*
     std::srand(std::time(0));
     int lIndexMax = 3;
     Couleur laListeCouleur[] = {ROUGE,VERT,BLEU,JAUNE};
@@ -33,11 +33,13 @@ void init(Case uneScene[LIGNE_S][COLONNE_S]){
         for(int laColonne = 0; laColonne <= DIM+1; laColonne += DIM+1)
             uneScene[laLigne][laColonne].saCouleur = randomColor(laListeCouleur, lIndexMax);
     }
+    */
 
 }
 
-Couleur randomColor(Couleur uneListeCouleur[], int & unIndexMax){
+Couleur randomColor(Couleur uneListeCouleur[], int * unIndexMax){
     int lAlea;
+    /*
     Couleur laCouleur;
 
     lAlea = rand()%(unIndexMax+1);
@@ -45,12 +47,15 @@ Couleur randomColor(Couleur uneListeCouleur[], int & unIndexMax){
 
     //On retire la couleur tirée puis réduction de l'index maximum du tableau.
     uneListeCouleur[lAlea] = uneListeCouleur[unIndexMax--];
+    */
 
-    return laCouleur;
+    //return laCouleur;
+    return uneListeCouleur[0];
 }
 
 
-void init(Piece desPieces[NBR_PIECES], Couleur uneCouleur, std::string & unNomFichier){
+void init_Piece(Piece desPieces[NBR_PIECES], Couleur uneCouleur, String* unNomFichier){
+    /*
     std::ifstream leFlux(unNomFichier.c_str());
     std::string laLigneStr;
 
@@ -87,13 +92,15 @@ void init(Piece desPieces[NBR_PIECES], Couleur uneCouleur, std::string & unNomFi
     }else
         std::cout<<"[Erreur]  Impossible d'ouvrir le fichier "<<unNomFichier<<" !\n";
     leFlux.close();
+    */
 }
 
 
-bool nbrJoueurs(int &unNbrJoueurs, int &unNbrBots){
+bool nbrJoueurs(int *unNbrJoueurs, int *unNbrBots){
+    /*
     //String pour eviter de boucler à l'infini si entree != un nombre
     bool estUneSauvegarde = false;
-    std::string uneEntree;
+    String uneEntree = str_new("");
     do{
         std::cout<<"Combien de joueurs ? (Ou tapez 'l' pour charger une partie depuis le fichier de sauvegarde) : ";
         std::getline(std::cin,uneEntree);
@@ -110,9 +117,12 @@ bool nbrJoueurs(int &unNbrJoueurs, int &unNbrBots){
         unNbrBots = demandeNbrBots(unNbrJoueurs);
 
     return estUneSauvegarde;
+    */
+    return false;
 }
 
 int demandeNbrBots(int unNbrJoueurs){
+    /*
     int leNbrBots = 0;
     std::string uneEntree;
     do{
@@ -125,10 +135,13 @@ int demandeNbrBots(int unNbrJoueurs){
 
     }while(!(leNbrBots >= 0 && leNbrBots <= unNbrJoueurs));
     return leNbrBots;
+    */
+    return 0;
 }
 
 
-void init(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estUneSauvegarde, std::string &unFichierP){
+void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estUneSauvegarde, String * unFichierP){
+    /*
     int lIndexMax = unNbrJoueurs-1;
     Couleur laListeCouleur[] = {BLEU, JAUNE, ROUGE, VERT};
     Couleur laCouleur;
@@ -179,4 +192,5 @@ void init(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estUneSauve
         }else
             desJoueurs[leJoueur].sonNom = "";
     }
+    */
 }

@@ -19,7 +19,7 @@ int demandeNbrBots(int unNbrJoueurs);
   * \brief Fonction initialisation de la Scene.
   * \param uneScene [out] La scene du jeu
   */
-void init(Case uneScene[LIGNE_S][COLONNE_S]);
+void init_Scene(Case uneScene[LIGNE_S][COLONNE_S]);
 
 /*!
   * \brief Fonction initialisation de la liste des pieces.
@@ -27,7 +27,7 @@ void init(Case uneScene[LIGNE_S][COLONNE_S]);
   * \param uneCouleur [in] la Couleur des pieces
   * \param unNomFichier [in] nom du fichier où se trouvent les pieces du jeux.
   */
-void init(Piece desPieces[NBR_PIECES], Couleur uneCouleur, std::string & unNomFichier);
+void init_Piece(Piece desPieces[NBR_PIECES], Couleur uneCouleur, String* unNomFichier);
 
 /*!
   * \brief Fonction tire un couleur aléatoire d'un tableau.
@@ -39,14 +39,14 @@ void init(Piece desPieces[NBR_PIECES], Couleur uneCouleur, std::string & unNomFi
   * puis l'index maximum diminu afin de ne pas retirer la même couleur.
   *
   */
-Couleur randomColor(Couleur uneListeCouleur[], int & unIndexMax);
+Couleur randomColor(Couleur uneListeCouleur[], int * unIndexMax);
 
 /*!
  * \brief Demande la saisie du nombre de joueur et verifie si la saisie est correcte
  * \param unNbrJoueurs [out] le nombre de joueurs dans la partie
  * \return true si le joueur lance une sauvegarde, sinon false
  */
-bool nbrJoueurs(int &unNbrJoueurs, int &unNbrBots);
+bool nbrJoueurs(int * unNbrJoueurs, int * unNbrBots);
 
 /*!
  * \brief Initialise les joueurs
@@ -54,6 +54,6 @@ bool nbrJoueurs(int &unNbrJoueurs, int &unNbrBots);
  * \param unNbrJoueurs [in] nombre de joueurs a creer
  * \param unFichierP [in] le nom du fichier ou se trouve les pieces
  */
-void init(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estUneSauvegarde, std::string &unFichierP);
+void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estUneSauvegarde, String * unFichierP);
 
 #endif // INIT_H

@@ -8,14 +8,14 @@
 #define CONSTANTES_H
 
 //Dimmension du plateau
-const int DIM =20;
+#define DIM 20
 
 //Dimmension de la scene
-const int LIGNE_S = DIM+12;
-const int COLONNE_S = DIM+90;
+#define LIGNE_S DIM+12
+#define COLONNE_S DIM+90
 
 //Nombre de pieces
-const int NBR_PIECES = 21;
+#define NBR_PIECES  21
 
 
 
