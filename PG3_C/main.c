@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #include <string.h>
+#include <time.h>
 
 #include "enum.h"
 #include "constantes.h"
@@ -20,6 +23,7 @@
 
 int main(){
 
+    srand(time(NULL));
     String leFichierP = str_new("../Blokus/pieces.txt");
     String leFichierS = str_new("../Blokus/sauvegarde/blokus.data");
 
@@ -34,6 +38,7 @@ int main(){
     int leNbrBots;
     int laMain;
     bool aJouer;
+
     
     estUneSauvegarde = nbrJoueurs(&leNbrJoueurs, &leNbrBots);
     Joueur lesJoueurs[4];
@@ -46,42 +51,47 @@ int main(){
 
 
     do{
-        str_set(&leMessage, "\n");
+        //str_set(&leMessage, "\n");
         //laMain = joueurTour(lesJoueurs, leNbrJoueurs, 0);
         //passeLeTour(lesJoueurs, leNbrJoueurs, laMain, laScene, leMessage);
 
         do{
             //leMessageInfo = "";
-            if(strcmp(laCommande, "s") == 0)
+
+            if(strcmp(laCommande, "s") == 0){
+                printf("DEMANDE_SAVE\n");
                 //demandeSauvegarde(lesJoueurs, leNbrJoueurs, laScene, leFichierS, leMessageInfo);
-                printf("DemandeSave\n");
-            else if(strcmp(laCommande, "l") == 0)
+            }else if(strcmp(laCommande, "l") == 0){
                 //demandeCharger(lesJoueurs, leNbrJoueurs, laScene, leFichierP, leFichierS, leMessageInfo, laMain);
                 printf("Demande Charger\n");
-            else if(strcmp(laCommande,"/auto") == 0)
-                for(int i = 0; i<leNbrJoueurs; i++)
-                    lesJoueurs[i].estBot = true;
+            }else if(strcmp(laCommande,"/auto") == 0){
+                for(int i = 0; i<leNbrJoueurs; i++){}
+                    //lesJoueurs[i].estBot = true;
+            }
 
-
+            printf("aaa\n");
             //clearPieces(laScene);
             //piecesDansScene(laScene, lesJoueurs, leNbrJoueurs);
             //afficher(laScene);
 
-            printf("%s%s[%s]", leMessageInfo, leMessage, "a");
-            
+
+            //printf("%s%s[%s]\n", leMessageInfo, leMessage, "a");
+            printf("PASSE\n");
+            return 0;
 
             //std::cout<<leMessageInfo;
             //std::cout<<leMessage;
             //std::cout<<'['<<lesJoueurs[laMain].sonNom<<"] ";
 
+            /*
             if(lesJoueurs[laMain].estBot){
                 //jouerBot(lesJoueurs[laMain], laScene, lesJoueurs, leNbrJoueurs);
                 //aJouer = true;
                 //std::cout<<std::endl;
             }else
-                printf("\n");
+                printf("bbbb\n");
                 //aJouer = jouer(lesJoueurs[laMain], laCommande,laScene);;
-                
+                */
             
         }while(!aJouer);
 

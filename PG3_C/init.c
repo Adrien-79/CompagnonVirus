@@ -1,4 +1,7 @@
+#include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
 
 #include "enum.h"
 #include "constantes.h"
@@ -24,33 +27,32 @@ void init_Scene(Case uneScene[LIGNE_S][COLONNE_S]){
         uneScene[lIndex+1][0].sonChar = lIndex + 'A'-1;
     }
 
-    /*
-    std::srand(std::time(0));
+    
     int lIndexMax = 3;
     Couleur laListeCouleur[] = {ROUGE,VERT,BLEU,JAUNE};
 
     for(int laLigne = 1; laLigne <= DIM+2; laLigne += DIM+1){
         for(int laColonne = 0; laColonne <= DIM+1; laColonne += DIM+1)
-            uneScene[laLigne][laColonne].saCouleur = randomColor(laListeCouleur, lIndexMax);
+            uneScene[laLigne][laColonne].saCouleur = randomColor(laListeCouleur, &lIndexMax);
     }
-    */
+    
 
 }
 
 Couleur randomColor(Couleur uneListeCouleur[], int * unIndexMax){
     int lAlea;
-    /*
-    Couleur laCouleur;
 
-    lAlea = rand()%(unIndexMax+1);
+    Couleur laCouleur;
+    int lindex = *unIndexMax;
+    lAlea = rand()%(lindex+1);
     laCouleur = uneListeCouleur[lAlea];
 
     //On retire la couleur tirée puis réduction de l'index maximum du tableau.
-    uneListeCouleur[lAlea] = uneListeCouleur[unIndexMax--];
-    */
+    uneListeCouleur[lAlea] = uneListeCouleur[lindex--];
+    *unIndexMax = lindex;
 
-    //return laCouleur;
-    return uneListeCouleur[0];
+
+    return laCouleur;
 }
 
 
@@ -97,28 +99,30 @@ void init_Piece(Piece desPieces[NBR_PIECES], Couleur uneCouleur, String* unNomFi
 
 
 bool nbrJoueurs(int *unNbrJoueurs, int *unNbrBots){
-    /*
+    int unNbrJoueursVal = *unNbrJoueurs;
+    int unNbrBotsVal = *unNbrBots;
+
     //String pour eviter de boucler à l'infini si entree != un nombre
     bool estUneSauvegarde = false;
-    String uneEntree = str_new("");
+    int uneEntree;
     do{
-        std::cout<<"Combien de joueurs ? (Ou tapez 'l' pour charger une partie depuis le fichier de sauvegarde) : ";
-        std::getline(std::cin,uneEntree);
-        unNbrJoueurs = int(uneEntree[0]-'0');
+        printf("Combien de joueurs ? (Ou tapez '0' pour charger une partie depuis le fichier de sauvegarde) : \n");
+        scanf("%d",&uneEntree);
+        if(uneEntree == 0)
+            return true;
+        
+        if(!((uneEntree > 1 && uneEntree < 5) || uneEntree == 60))
+            printf("Oops ! Saisir un nombre de joueurs entre 2 et 4 !\n");
 
-        if(!((unNbrJoueurs > 1 && unNbrJoueurs < 5) || unNbrJoueurs == 60))
-            std::cout<<"Oops ! Saisir un nombre de joueurs entre 2 et 4 !\n";
+    }while(!((uneEntree > 1 && uneEntree < 5) || uneEntree == 60));
 
-    }while(!((unNbrJoueurs > 1 && unNbrJoueurs < 5) || unNbrJoueurs == 60));
-
-    if(unNbrJoueurs == 60)
-        estUneSauvegarde = true;
-    else
-        unNbrBots = demandeNbrBots(unNbrJoueurs);
-
+    if(uneEntree != 0)
+        unNbrBotsVal = demandeNbrBots(unNbrJoueursVal);
+        
+        
+    *unNbrJoueurs = unNbrJoueursVal;
+    *unNbrBots = unNbrBotsVal; 
     return estUneSauvegarde;
-    */
-    return false;
 }
 
 int demandeNbrBots(int unNbrJoueurs){

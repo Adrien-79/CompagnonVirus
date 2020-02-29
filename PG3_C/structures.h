@@ -16,11 +16,12 @@
 struct Case{
     char sonChar;
     Couleur saCouleur;
-} Case_i = {' ', DEFAULT};
+};
 
 typedef struct Case Case;
 
 
+Case Case_new();
 /*!
   * \struct Piece
   * \brief Une piece du jeu, defini par sa Hauteur, sa Largeur, son Numero, sa couleur, si elle est jouable, sa forme (tableau), et sa rotation
@@ -36,9 +37,11 @@ struct Piece{
     int saRotation;
     int saPosition;
 
-} Piece_i = {-1, -1, -1, 0, true, ROUGE, {{false}}, 0, 0};
+};
 
 typedef struct Piece Piece;
+
+Piece Piece_new();
 
 /*!
   * \struct Joueur
@@ -51,7 +54,10 @@ struct Joueur{
     int sonTour;
     bool estFini;
     bool estBot;
-} Joueur_i = {"NULL", {}, 0, 0, false, false};
+};
 
 typedef struct Joueur Joueur;
+
+Joueur Joueur_new();
+
 #endif // STRUCTURES_H
