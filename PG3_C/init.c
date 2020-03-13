@@ -117,7 +117,7 @@ bool nbrJoueurs(int *unNbrJoueurs, int *unNbrBots){
     }while(!((uneEntree > 1 && uneEntree < 5) || uneEntree == 60));
 
     if(uneEntree != 0)
-        unNbrBotsVal = demandeNbrBots(unNbrJoueursVal);
+        unNbrBotsVal = demandeNbrBots(uneEntree);
         
         
     *unNbrJoueurs = unNbrJoueursVal;
@@ -126,44 +126,39 @@ bool nbrJoueurs(int *unNbrJoueurs, int *unNbrBots){
 }
 
 int demandeNbrBots(int unNbrJoueurs){
-    /*
     int leNbrBots = 0;
-    std::string uneEntree;
     do{
-        std::cout<<"Combien de bots ? (entre 0 et "<<unNbrJoueurs<<" ) : ";
-        std::getline(std::cin,uneEntree);
-        leNbrBots = int(uneEntree[0]-'0');
-
+        printf("Combien de bots ? (entre 0 et %d ) : \n", unNbrJoueurs);
+        scanf("%d", &leNbrBots);
         if(!(leNbrBots >= 0 && leNbrBots <= unNbrJoueurs))
-            std::cout<<"Oops ! Saisir un nombre de bots entre 0 et "<<unNbrJoueurs<<" !\n";
+            printf("Oops ! Saisir un nombre de bots entre 0 et %d !\n", unNbrJoueurs);
 
     }while(!(leNbrBots >= 0 && leNbrBots <= unNbrJoueurs));
     return leNbrBots;
-    */
-    return 0;
+    
 }
 
 
 void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estUneSauvegarde, String * unFichierP){
-    /*
+    
     int lIndexMax = unNbrJoueurs-1;
     Couleur laListeCouleur[] = {BLEU, JAUNE, ROUGE, VERT};
     Couleur laCouleur;
     int lOrdre;
     bool estCorrect;
-    std::string leNom;
+    String leNom = str_new("");
 
-    desJoueurs[0].sonNom = "BOT- GLaDOS";
-    desJoueurs[1].sonNom = "BOT- HAL 9000";
-    desJoueurs[2].sonNom = "BOT- R2D2";
-    desJoueurs[3].sonNom = "BOT- Skynet";
+    desJoueurs[0].sonNom = str_new("BOT- GLaDOS");
+    desJoueurs[1].sonNom = str_new("BOT- HAL 9000");
+    desJoueurs[2].sonNom = str_new("BOT- R2D2");
+    desJoueurs[3].sonNom = str_new("BOT- Skynet");
 
     for(int leBot = 0; leBot < unNbrBots; leBot++)
         desJoueurs[leBot].estBot = true;
 
     for(int leJoueur = 0; leJoueur < unNbrJoueurs && unNbrJoueurs < 5; leJoueur++){
         if(!estUneSauvegarde){
-            laCouleur = randomColor(laListeCouleur, lIndexMax);
+            laCouleur = randomColor(laListeCouleur, &lIndexMax);
 
             switch (laCouleur) {
             case BLEU: lOrdre = 0; break;
@@ -173,8 +168,8 @@ void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estU
             }
 
             desJoueurs[leJoueur].sonTour = lOrdre;
-            init(desJoueurs[leJoueur].sesPieces, laCouleur, unFichierP);
-
+            init_Piece(desJoueurs[leJoueur].sesPieces, laCouleur, unFichierP);
+            /*
             if(!desJoueurs[leJoueur].estBot){
                 do{
                     estCorrect = true;
@@ -195,6 +190,7 @@ void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estU
             }
         }else
             desJoueurs[leJoueur].sonNom = "";
-    }
     */
+    }
+}
 }
