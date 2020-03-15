@@ -11,7 +11,14 @@
 #include "init.h"
 
 
-void init_Scene(Case uneScene[LIGNE_S][COLONNE_S]){
+void init_Scene(Case (*uneScene)[COLONNE_S]){
+
+      for(int laLigne = 0; laLigne < LIGNE_S; laLigne++){
+          for(int laColonne = 0; laColonne < COLONNE_S; laColonne++){
+            uneScene[laLigne][laColonne].sonChar = ' ';
+            uneScene[laLigne][laColonne].saCouleur = DEFAULT;
+          }
+        }
 
     for(int laLigne = 0; laLigne < DIM; laLigne++){
         for(int laColonne = 0; laColonne < DIM; laColonne++){
@@ -27,7 +34,6 @@ void init_Scene(Case uneScene[LIGNE_S][COLONNE_S]){
         uneScene[lIndex+1][0].sonChar = lIndex + 'A'-1;
     }
 
-    
     int lIndexMax = 3;
     Couleur laListeCouleur[] = {ROUGE,VERT,BLEU,JAUNE};
 
@@ -35,7 +41,9 @@ void init_Scene(Case uneScene[LIGNE_S][COLONNE_S]){
         for(int laColonne = 0; laColonne <= DIM+1; laColonne += DIM+1)
             uneScene[laLigne][laColonne].saCouleur = randomColor(laListeCouleur, &lIndexMax);
     }
-    
+
+
+
 
 }
 
@@ -51,26 +59,24 @@ Couleur randomColor(Couleur uneListeCouleur[], int * unIndexMax){
     uneListeCouleur[lAlea] = uneListeCouleur[lindex--];
     *unIndexMax = lindex;
 
-
     return laCouleur;
 }
 
 
-void init_Piece(Piece desPieces[NBR_PIECES], Couleur uneCouleur, String* unNomFichier){
-    /*
-    std::ifstream leFlux(unNomFichier.c_str());
-    std::string laLigneStr;
+void init_Piece(Piece desPieces[NBR_PIECES], Couleur uneCouleur, String unNomFichier){
+    String laLigneStr = str_new("**************");
+    FILE* leFichier = fopen(unNomFichier, "r");
 
-    bool ilExiste(!leFlux.fail());
     //SI le fichier existe:
-    if(ilExiste){
-        int laLigne(0), laColonne(0), leIndex(0), laLargeurMax(0);
-
+    if(leFichier != NULL){
+        int laLigne = 0, laColonne = 0, leIndex = 0, laLargeurMax = 0;
+        int lenLigne;
+        size_t len = 0;
         do{
-            std::getline(leFlux, laLigneStr);
-
-            if(laLigneStr.length()>0){
-                for(laColonne = 0; laColonne < laLigneStr.length(); laColonne++){
+          lenLigne = getline(&laLigneStr, &len, leFichier);
+          lenLigne = lenLigne - 1;
+            if(lenLigne>0){
+                for(laColonne = 0; laColonne < lenLigne; laColonne++){
                     if(laLigneStr[laColonne] == 'x'){
                         desPieces[leIndex].saMatrice[laLigne][laColonne] = true;
                         desPieces[leIndex].sonNbrCases++;
@@ -80,27 +86,30 @@ void init_Piece(Piece desPieces[NBR_PIECES], Couleur uneCouleur, String* unNomFi
                     laLargeurMax = laColonne;
                 laLigne++;
             }
-            if(laLigneStr.length()==0 || leFlux.eof()){
+
+
+            if(lenLigne==0){
                 desPieces[leIndex].saHauteur = laLigne;
                 desPieces[leIndex].saLargeur = laLargeurMax;
                 desPieces[leIndex].sonNumero = leIndex+1;
                 desPieces[leIndex].saCouleur = uneCouleur;
+                desPieces[leIndex].estDispo = true;
                 leIndex++;
                 laLigne = 0;
                 laLargeurMax = 0;
-            }
 
-        }while(!leFlux.eof());
+
+            }
+        }while (lenLigne != -2);
     }else
-        std::cout<<"[Erreur]  Impossible d'ouvrir le fichier "<<unNomFichier<<" !\n";
-    leFlux.close();
-    */
+        printf("[Erreur]  Impossible d'ouvrir le fichier %s !\n", unNomFichier);
+    fclose(leFichier);
+    str_delete(laLigneStr);
+
 }
 
 
 bool nbrJoueurs(int *unNbrJoueurs, int *unNbrBots){
-    int unNbrJoueursVal = *unNbrJoueurs;
-    int unNbrBotsVal = *unNbrBots;
 
     //String pour eviter de boucler à l'infini si entree != un nombre
     bool estUneSauvegarde = false;
@@ -110,18 +119,20 @@ bool nbrJoueurs(int *unNbrJoueurs, int *unNbrBots){
         scanf("%d",&uneEntree);
         if(uneEntree == 0)
             return true;
-        
+
         if(!((uneEntree > 1 && uneEntree < 5) || uneEntree == 60))
             printf("Oops ! Saisir un nombre de joueurs entre 2 et 4 !\n");
 
     }while(!((uneEntree > 1 && uneEntree < 5) || uneEntree == 60));
 
-    if(uneEntree != 0)
-        unNbrBotsVal = demandeNbrBots(uneEntree);
-        
-        
-    *unNbrJoueurs = unNbrJoueursVal;
-    *unNbrBots = unNbrBotsVal; 
+    *unNbrJoueurs = uneEntree;
+
+    if(uneEntree != 0){
+        uneEntree = demandeNbrBots(uneEntree);
+        *unNbrBots = uneEntree;
+
+      }
+
     return estUneSauvegarde;
 }
 
@@ -135,18 +146,18 @@ int demandeNbrBots(int unNbrJoueurs){
 
     }while(!(leNbrBots >= 0 && leNbrBots <= unNbrJoueurs));
     return leNbrBots;
-    
+
 }
 
 
-void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estUneSauvegarde, String * unFichierP){
-    
+void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estUneSauvegarde, String unFichierP){
+
     int lIndexMax = unNbrJoueurs-1;
     Couleur laListeCouleur[] = {BLEU, JAUNE, ROUGE, VERT};
     Couleur laCouleur;
     int lOrdre;
     bool estCorrect;
-    String leNom = str_new("");
+    String leNom = str_new("AAAAAAAAAAAA");
 
     desJoueurs[0].sonNom = str_new("BOT- GLaDOS");
     desJoueurs[1].sonNom = str_new("BOT- HAL 9000");
@@ -156,7 +167,11 @@ void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estU
     for(int leBot = 0; leBot < unNbrBots; leBot++)
         desJoueurs[leBot].estBot = true;
 
+    for(int j = unNbrBots; j < unNbrJoueurs; j++)
+        desJoueurs[j].estBot = false;
+
     for(int leJoueur = 0; leJoueur < unNbrJoueurs && unNbrJoueurs < 5; leJoueur++){
+
         if(!estUneSauvegarde){
             laCouleur = randomColor(laListeCouleur, &lIndexMax);
 
@@ -166,31 +181,32 @@ void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estU
             case ROUGE: lOrdre = 2; break;
             case VERT: lOrdre = 3;
             }
-
             desJoueurs[leJoueur].sonTour = lOrdre;
+
             init_Piece(desJoueurs[leJoueur].sesPieces, laCouleur, unFichierP);
-            /*
+
+
             if(!desJoueurs[leJoueur].estBot){
                 do{
                     estCorrect = true;
-                    std::cout<<"Entrez le nom du joueur numero "<<leJoueur+1<<" : ";
-                    std::getline(std::cin, leNom);
+                    printf("Entrez le nom du joueur numero %d : \n",leJoueur+1);
+                    scanf("%s", leNom);
 
-                        for(int lIndex = 0; lIndex < leNom.length() && estCorrect; lIndex++){
+                        for(int lIndex = 0; leNom[lIndex] != '\0' && estCorrect; lIndex++){
                             if(!((leNom[lIndex] >= 'A' && leNom[lIndex] <= 'Z')
                                  || (leNom[lIndex] >= 'a' && leNom[lIndex] <= 'z')
                                  || leNom[lIndex] == ' ' || leNom[lIndex] == '-' || leNom[lIndex] == '\'')){
-                                std::cout<<"Oups ! Votre pseudo ne doit comporter que des lettres (majuscules ou minuscules), espaces, tirets et apostrophes !"<<std::endl;
+                                printf("Oups ! Votre pseudo ne doit comporter que des lettres (majuscules ou minuscules), espaces, tirets et apostrophes !\n");
                                 estCorrect = false;
                             }
                         }
 
                 }while(!estCorrect);
-                desJoueurs[leJoueur].sonNom = leNom;
+                str_set(&desJoueurs[leJoueur].sonNom, leNom);
             }
         }else
-            desJoueurs[leJoueur].sonNom = "";
-    */
+            str_set(&desJoueurs[leJoueur].sonNom, str_new(""));
     }
-}
+
+    str_delete(leNom);
 }

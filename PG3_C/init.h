@@ -19,7 +19,7 @@ int demandeNbrBots(int unNbrJoueurs);
   * \brief Fonction initialisation de la Scene.
   * \param uneScene [out] La scene du jeu
   */
-void init_Scene(Case uneScene[LIGNE_S][COLONNE_S]);
+  void init_Scene(Case (*uneScene)[COLONNE_S]);
 
 /*!
   * \brief Fonction initialisation de la liste des pieces.
@@ -27,7 +27,7 @@ void init_Scene(Case uneScene[LIGNE_S][COLONNE_S]);
   * \param uneCouleur [in] la Couleur des pieces
   * \param unNomFichier [in] nom du fichier où se trouvent les pieces du jeux.
   */
-void init_Piece(Piece desPieces[NBR_PIECES], Couleur uneCouleur, String* unNomFichier);
+void init_Piece(Piece desPieces[NBR_PIECES], Couleur uneCouleur, String unNomFichier);
 
 /*!
   * \brief Fonction tire un couleur aléatoire d'un tableau.
@@ -54,6 +54,6 @@ bool nbrJoueurs(int * unNbrJoueurs, int * unNbrBots);
  * \param unNbrJoueurs [in] nombre de joueurs a creer
  * \param unFichierP [in] le nom du fichier ou se trouve les pieces
  */
-void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estUneSauvegarde, String * unFichierP);
+void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estUneSauvegarde, String unFichierP);
 
 #endif // INIT_H

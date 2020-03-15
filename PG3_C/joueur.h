@@ -19,7 +19,7 @@ int joueurTour(Joueur desJoueurs[], int unNbrJoueurs, int unTour);
  * \param desJoueurs [in out] les joueurs
  * \param unNbrJoueurs [in] le nombre de joueur
  */
-void changeTour(Joueur desJoueurs[], int unNbrJoueurs);
+//void changeTour(Joueur desJoueurs[], int unNbrJoueurs);
 
 /*!
  * \brief Recherche le prochain joueur a pouvoir jouer, renvoie un message si un joueur passe son tour puis marque ce joueur comme ayant fini de jouer
@@ -29,7 +29,7 @@ void changeTour(Joueur desJoueurs[], int unNbrJoueurs);
  * \param uneScene [in] la scene du jeu
  * \param unMessage [out] le message a renvoyer si un joueur passe son tour
  */
-void passeLeTour(Joueur desJoueurs[], int unNbrJoueurs, int &uneMain, Case uneScene[LIGNE_S][COLONNE_S], std::string &unMessage);
+//void passeLeTour(Joueur desJoueurs[], int unNbrJoueurs, int &uneMain, Case uneScene[LIGNE_S][COLONNE_S], std::string &unMessage);
 
 /*!
  * \brief Demande au joueur ayant la main une sequence, puis annalyse et execute la séquence
@@ -37,7 +37,7 @@ void passeLeTour(Joueur desJoueurs[], int unNbrJoueurs, int &uneMain, Case uneSc
  * \param uneScene [in out] la scene du jeu
  * \return true, si le joueur a pu placer une piece, sinon false
  */
-bool jouer(Joueur &unJoueur,std::string &uneCommande ,Case uneScene[LIGNE_S][COLONNE_S]);
+//bool jouer(Joueur &unJoueur,std::string &uneCommande ,Case uneScene[LIGNE_S][COLONNE_S]);
 
 /*!
  * \brief Test si un joueur a encore la possibilité de jouer
@@ -45,7 +45,7 @@ bool jouer(Joueur &unJoueur,std::string &uneCommande ,Case uneScene[LIGNE_S][COL
  * \param uneScene [in] la scene du jeu
  * \return true si le joueur peut encore jouer, sinon la fonction renvoie false, et le joueur est marqué comme ayant fini
  */
-bool peutJouer(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S]);
+//bool peutJouer(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S]);
 
 /*!
  * \brief Test si le jeu est terminé
@@ -54,14 +54,14 @@ bool peutJouer(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S]);
  * \param uneScene [in] la scene du jeu
  * \return true si le jeu est fini, sinon false
  */
-bool estFini(Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]);
+//bool estFini(Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]);
 
 /*!
  * \brief Test si un joueur a encore des pieces à placer
  * \param unJoueur [in out] le joueur a tester
  * \return true, si il peut encore placer des pieces, sinon false et le marque comme ayant fini
  */
-bool aEncorePiece(Joueur &unJoueur);
+//bool aEncorePiece(Joueur &unJoueur);
 
 /*!
  * \brief Analyse un commande rentrer par un joueur, et renvoie une table des rotations et un placement a faire avec une syntaxe correcte
@@ -69,21 +69,21 @@ bool aEncorePiece(Joueur &unJoueur);
  * \param desRotations [out]  la table des rotations a faire
  * \param unPlacement [out] la placement de la piece (la piece, la ligne, la colonne)
  */
-void analyser(std::string &uneCommande, std::string &desRotations, int unPlacement[3]);
+//void analyser(std::string &uneCommande, std::string &desRotations, int unPlacement[3]);
 
 /*!
  * \brief Calcule le score d'un joueur quand celui ci a posé toutes ses pieces
  * \param unJoueur [in out] le joueur a calculer
  * \param unNombre [in] nombre de cases de la derniere piece posée par le joueur
  */
-void ajoutScore(Joueur &unJoueur, int unNombre);
+//void ajoutScore(Joueur &unJoueur, int unNombre);
 
 /*!
  * \brief Calcule le score en fin de partie par piece non posee
  * \param desJoueurs [in out] les joueurs
  * \param unNombre [in] le nombre de joueur
  */
-void calculeScore(Joueur desJoueurs[2], int unNbrJoueurs);
+//void calculeScore(Joueur desJoueurs[2], int unNbrJoueurs);
 
 /*!
  * \brief Trouve le joueur avec le score le plus haut dans une liste
@@ -92,6 +92,8 @@ void calculeScore(Joueur desJoueurs[2], int unNbrJoueurs);
  * \param unIndexMax [in out] l'index maximum de la liste des joueur a choisir
  * \return l'index du joueur avec le score maximum.
  */
-int max(Joueur desJoueurs[], int desJoueursTri[], int &unIndexMax);
+//int max(Joueur desJoueurs[], int desJoueursTri[], int &unIndexMax);
+
+
 
 #endif // JOUEUR_H

@@ -28,7 +28,7 @@ void clearPieces(Case uneScene[LIGNE_S][COLONNE_S]);
   * \param uneLigne [in] la Ligne dans la scene ou placer la piece
   * \param uneColonne [in] la colonne dans la scene ou placer la piece
   */
-void placer(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne);
+void placer(Piece unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne);
 
 /*!
   * \brief Fonction qui test si une piece est placable dans le plateau
@@ -38,7 +38,7 @@ void placer(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, in
   * \param uneColonne [in] la colonne de la scene ou l'on veut tester la piece
   * \return true si la piece peut être placer sinon false.
   */
-bool estPlacable(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne);
+//bool estPlacable(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne);
 
 /*!
  * \brief Ecrit une chaine de caractere dans la scene
@@ -47,7 +47,7 @@ bool estPlacable(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLign
  * \param uneLigne [in] la ligne dans la scene
  * \param uneColonne [in] la colonne dans la scene
  */
-void ecrireMot(std::string &unMot,Case uneScene[LIGNE_S][COLONNE_S] ,int uneLigne, int uneColonne);
+void ecrireMot(String unMot,Case uneScene[LIGNE_S][COLONNE_S] ,int uneLigne, int uneColonne);
 
 /*!
  * \brief Insere le score des joueurs dans la scene à droite
@@ -55,5 +55,5 @@ void ecrireMot(std::string &unMot,Case uneScene[LIGNE_S][COLONNE_S] ,int uneLign
  * \param unNbrJoueurs [in] le nombre de joueur a afficher
  * \param uneScene [out] la scene
  */
-void putScore(Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]);
+//void putScore(Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]);
 #endif // SCENE_H

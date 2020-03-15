@@ -1,4 +1,6 @@
-#include <iostream>
+#include <stdio.h>
+#include "string.h"
+
 #include "enum.h"
 #include "constantes.h"
 #include "structures.h"
@@ -8,10 +10,10 @@
 
 
 void piecesDansScene(Case uneScene[LIGNE_S][COLONNE_S], Joueur desJoueurs[], int unNbrJoueurs){
-    int laLigneTableau(2);
-    int laColonneTableau(DIM+3);
+    int laLigneTableau = 2;
+    int laColonneTableau = DIM+3;
     int leJoueur;
-    std::string laPieceSTR;
+    String laPieceSTR = str_new("xx");
     int laHauteurMax;
 
 
@@ -20,27 +22,27 @@ void piecesDansScene(Case uneScene[LIGNE_S][COLONNE_S], Joueur desJoueurs[], int
         laHauteurMax = 0;
         ecrireMot(desJoueurs[leJoueur].sonNom, uneScene, laLigneTableau-2, laColonneTableau);
 
-        Piece lesPieces[NBR_PIECES] = {};
-        //Piece lesPieces[NBR_PIECES] = desJoueurs[leJoueur].sesPieces;
-        for(int i = 0; i < NBR_PIECES; i++){lesPieces[i] = desJoueurs[leJoueur].sesPieces[i];} //ARM FIX
         for(int lIndex = 0; lIndex < NBR_PIECES; lIndex++){
-            if(lesPieces[lIndex].estDispo){
-                laPieceSTR = std::to_string(lesPieces[lIndex].sonNumero);
+            if(desJoueurs[leJoueur].sesPieces[lIndex].estDispo){
+              sprintf(laPieceSTR, "%d", desJoueurs[leJoueur].sesPieces[lIndex].sonNumero);
+              //TO DO  laPieceSTR = std::to_string(lesPieces[lIndex].sonNumero);
                 ecrireMot(laPieceSTR,uneScene,laLigneTableau-1,laColonneTableau);
-
                 //On récupere la hauteur de la piece avec la hauteur la plus haute (pour le décalage de la ligne suivante)
-                if(lesPieces[lIndex].saHauteur > laHauteurMax)
-                    laHauteurMax = lesPieces[lIndex].saHauteur;
+                if(desJoueurs[leJoueur].sesPieces[lIndex].saHauteur > laHauteurMax)
+                    laHauteurMax = desJoueurs[leJoueur].sesPieces[lIndex].saHauteur;
 
 
-                placer(lesPieces[lIndex], uneScene, laLigneTableau, laColonneTableau);
-                laColonneTableau += lesPieces[lIndex].saLargeur +1;
+                placer(desJoueurs[leJoueur].sesPieces[lIndex], uneScene, laLigneTableau, laColonneTableau);
+                laColonneTableau += desJoueurs[leJoueur].sesPieces[lIndex].saLargeur +1;
             }
         }
         laLigneTableau += laHauteurMax+3;
         laColonneTableau = DIM+3;
     }
+
+    str_delete(laPieceSTR);
 }
+
 
 void clearPieces(Case uneScene[LIGNE_S][COLONNE_S]){
     for(int laLigne = 0; laLigne < LIGNE_S; laLigne++){
@@ -52,7 +54,18 @@ void clearPieces(Case uneScene[LIGNE_S][COLONNE_S]){
 }
 
 
-void placer(Piece & unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne){
+void ecrireMot(String unMot,Case uneScene[LIGNE_S][COLONNE_S] ,int uneLigne, int uneColonne){
+    char leChar = unMot[0];
+    int leIndex = 0;
+    while(leChar != '\0'){
+        uneScene[uneLigne][uneColonne+leIndex].sonChar = leChar;
+        leChar = unMot[++leIndex];
+    }
+
+}
+
+
+void placer(Piece unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne){
     for(int laLigne = 0; laLigne < unePiece.saHauteur; laLigne++){
         for(int laColonne = 0; laColonne < unePiece.saLargeur; laColonne++){
             if(unePiece.saMatrice[laLigne][laColonne] == true){
@@ -63,6 +76,7 @@ void placer(Piece & unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, i
     }
 }
 
+/*
 bool estPlacable(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne){
     bool aUnCoin(false);
     bool estPlacable(true);
@@ -101,17 +115,6 @@ bool estPlacable(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLign
     return estPlacable && aUnCoin;
 }
 
-void ecrireMot(std::string &unMot,Case uneScene[LIGNE_S][COLONNE_S] ,int uneLigne, int uneColonne){
-    char leChar;
-    int leIndex = 0;
-
-    do{
-        leChar = unMot[leIndex];
-        uneScene[uneLigne][uneColonne+leIndex].sonChar = leChar;
-        leIndex++;
-    }while(leChar != '\0');
-
-}
 
 void putScore(Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]){
     int laLigne, laColonne;
@@ -142,6 +145,4 @@ void putScore(Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLO
 
 }
 
-
-
-
+*/

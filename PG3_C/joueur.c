@@ -1,11 +1,24 @@
-#include <iostream>
+#include <stdio.h>
+#include "string.h"
+
 #include "enum.h"
 #include "constantes.h"
 #include "structures.h"
 
 #include "scene.h"
-#include "piece.h"
+//#include "piece.h"
 #include "joueur.h"
+
+
+int joueurTour(Joueur desJoueurs[], int unNbrJoueurs, int unTour){
+    for(int leJoueur = 0; leJoueur < unNbrJoueurs; leJoueur++){
+        if(unTour == desJoueurs[leJoueur].sonTour){
+            return leJoueur;
+          }
+    }
+}
+
+/*
 
 void changeTour(Joueur desJoueurs[], int unNbrJoueurs){
     int leTour;
@@ -21,12 +34,6 @@ void changeTour(Joueur desJoueurs[], int unNbrJoueurs){
     }
 }
 
-int joueurTour(Joueur desJoueurs[], int unNbrJoueurs, int unTour){
-    for(int leJoueur = 0; leJoueur < unNbrJoueurs; leJoueur++){
-        if(unTour == desJoueurs[leJoueur].sonTour)
-            return leJoueur;
-    }
-}
 
 
 bool peutJouer(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S]){
@@ -194,3 +201,4 @@ int max(Joueur desJoueurs[], int desJoueursTri[], int &unIndexMax){
     return leJoueurMax;
 }
 
+*/

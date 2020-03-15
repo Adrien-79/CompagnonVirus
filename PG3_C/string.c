@@ -26,3 +26,6 @@ void str_concat(String* dest, String source){
 }
 
 
+void str_delete(String s){
+	free(s);
+}

@@ -10,12 +10,13 @@
 
 #include "string.h"
 #include "init.h"
-/**
-
 #include "affichage.h"
 #include "scene.h"
-#include "piece.h"
 #include "joueur.h"
+
+/**
+
+#include "piece.h"
 
 #include "sauvegarde.h"
 #include "bot.h"
@@ -31,6 +32,10 @@ int main(){
     String leMessageInfo = str_new("");
 
     String laCommande = str_new("");
+
+
+
+
     Case laScene[LIGNE_S][COLONNE_S];
     bool laFin = false;
     bool estUneSauvegarde;
@@ -39,12 +44,16 @@ int main(){
     int laMain;
     bool aJouer;
 
-    
+
     estUneSauvegarde = nbrJoueurs(&leNbrJoueurs, &leNbrBots);
     Joueur lesJoueurs[4];
 
     init_Scene(laScene);
-    init_Joueur(lesJoueurs, leNbrJoueurs, leNbrBots,estUneSauvegarde , &leFichierP);
+
+
+
+    init_Joueur(lesJoueurs, leNbrJoueurs, leNbrBots,estUneSauvegarde , leFichierP);
+
 
     //if(estUneSauvegarde)
         //charger(lesJoueurs, leNbrJoueurs, laScene, leFichierP, leFichierS);
@@ -52,7 +61,7 @@ int main(){
 
     do{
         //str_set(&leMessage, "\n");
-        //laMain = joueurTour(lesJoueurs, leNbrJoueurs, 0);
+        laMain = joueurTour(lesJoueurs, leNbrJoueurs, 0);
         //passeLeTour(lesJoueurs, leNbrJoueurs, laMain, laScene, leMessage);
 
         do{
@@ -69,10 +78,13 @@ int main(){
                     //lesJoueurs[i].estBot = true;
             }
 
-            printf("aaa\n");
-            //clearPieces(laScene);
-            //piecesDansScene(laScene, lesJoueurs, leNbrJoueurs);
-            //afficher(laScene);
+
+          clearPieces(laScene);
+
+          piecesDansScene(laScene, lesJoueurs, leNbrJoueurs);
+
+          afficher(laScene);
+
 
 
             //printf("%s%s[%s]\n", leMessageInfo, leMessage, "a");
@@ -92,7 +104,7 @@ int main(){
                 printf("bbbb\n");
                 //aJouer = jouer(lesJoueurs[laMain], laCommande,laScene);;
                 */
-            
+
         }while(!aJouer);
 
         //changeTour(lesJoueurs, leNbrJoueurs);
@@ -109,5 +121,9 @@ int main(){
     //putScore(lesJoueurs, leNbrJoueurs, laScene);
     //afficher(laScene);
 
+    str_delete(leFichierP);
+    str_delete(leFichierS);
+    str_delete(leMessage);
+    str_delete(leMessageInfo);
     return 0;
 }
