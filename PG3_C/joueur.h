@@ -19,7 +19,7 @@ int joueurTour(Joueur desJoueurs[], int unNbrJoueurs, int unTour);
  * \param desJoueurs [in out] les joueurs
  * \param unNbrJoueurs [in] le nombre de joueur
  */
-//void changeTour(Joueur desJoueurs[], int unNbrJoueurs);
+void changeTour(Joueur desJoueurs[], int unNbrJoueurs);
 
 /*!
  * \brief Recherche le prochain joueur a pouvoir jouer, renvoie un message si un joueur passe son tour puis marque ce joueur comme ayant fini de jouer
@@ -29,7 +29,7 @@ int joueurTour(Joueur desJoueurs[], int unNbrJoueurs, int unTour);
  * \param uneScene [in] la scene du jeu
  * \param unMessage [out] le message a renvoyer si un joueur passe son tour
  */
-//void passeLeTour(Joueur desJoueurs[], int unNbrJoueurs, int &uneMain, Case uneScene[LIGNE_S][COLONNE_S], std::string &unMessage);
+void passeLeTour(Joueur desJoueurs[], int unNbrJoueurs, int *uneMain, Case uneScene[LIGNE_S][COLONNE_S], String* unMessage);
 
 /*!
  * \brief Demande au joueur ayant la main une sequence, puis annalyse et execute la séquence
@@ -37,7 +37,7 @@ int joueurTour(Joueur desJoueurs[], int unNbrJoueurs, int unTour);
  * \param uneScene [in out] la scene du jeu
  * \return true, si le joueur a pu placer une piece, sinon false
  */
-//bool jouer(Joueur &unJoueur,std::string &uneCommande ,Case uneScene[LIGNE_S][COLONNE_S]);
+bool jouer(Joueur *unJoueur,String *uneCommande ,Case uneScene[LIGNE_S][COLONNE_S]);
 
 /*!
  * \brief Test si un joueur a encore la possibilité de jouer
@@ -45,7 +45,7 @@ int joueurTour(Joueur desJoueurs[], int unNbrJoueurs, int unTour);
  * \param uneScene [in] la scene du jeu
  * \return true si le joueur peut encore jouer, sinon la fonction renvoie false, et le joueur est marqué comme ayant fini
  */
-//bool peutJouer(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S]);
+bool peutJouer(Joueur unJoueur, Case uneScene[LIGNE_S][COLONNE_S]);
 
 /*!
  * \brief Test si le jeu est terminé
@@ -69,7 +69,7 @@ int joueurTour(Joueur desJoueurs[], int unNbrJoueurs, int unTour);
  * \param desRotations [out]  la table des rotations a faire
  * \param unPlacement [out] la placement de la piece (la piece, la ligne, la colonne)
  */
-//void analyser(std::string &uneCommande, std::string &desRotations, int unPlacement[3]);
+void analyser(String uneCommande, String *desRotations, int unPlacement[3]);
 
 /*!
  * \brief Calcule le score d'un joueur quand celui ci a posé toutes ses pieces

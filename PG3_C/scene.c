@@ -21,19 +21,20 @@ void piecesDansScene(Case uneScene[LIGNE_S][COLONNE_S], Joueur desJoueurs[], int
         leJoueur = joueurTour(desJoueurs, unNbrJoueurs, leTour);
         laHauteurMax = 0;
         ecrireMot(desJoueurs[leJoueur].sonNom, uneScene, laLigneTableau-2, laColonneTableau);
+        Piece* lesPieces = desJoueurs[leJoueur].sesPieces;
 
         for(int lIndex = 0; lIndex < NBR_PIECES; lIndex++){
-            if(desJoueurs[leJoueur].sesPieces[lIndex].estDispo){
-              sprintf(laPieceSTR, "%d", desJoueurs[leJoueur].sesPieces[lIndex].sonNumero);
+            if(lesPieces[lIndex].estDispo){
+              sprintf(laPieceSTR, "%d", lesPieces[lIndex].sonNumero);
               //TO DO  laPieceSTR = std::to_string(lesPieces[lIndex].sonNumero);
                 ecrireMot(laPieceSTR,uneScene,laLigneTableau-1,laColonneTableau);
                 //On récupere la hauteur de la piece avec la hauteur la plus haute (pour le décalage de la ligne suivante)
-                if(desJoueurs[leJoueur].sesPieces[lIndex].saHauteur > laHauteurMax)
-                    laHauteurMax = desJoueurs[leJoueur].sesPieces[lIndex].saHauteur;
+                if(lesPieces[lIndex].saHauteur > laHauteurMax)
+                    laHauteurMax = lesPieces[lIndex].saHauteur;
 
 
-                placer(desJoueurs[leJoueur].sesPieces[lIndex], uneScene, laLigneTableau, laColonneTableau);
-                laColonneTableau += desJoueurs[leJoueur].sesPieces[lIndex].saLargeur +1;
+                placer(lesPieces[lIndex], uneScene, laLigneTableau, laColonneTableau);
+                laColonneTableau += lesPieces[lIndex].saLargeur +1;
             }
         }
         laLigneTableau += laHauteurMax+3;

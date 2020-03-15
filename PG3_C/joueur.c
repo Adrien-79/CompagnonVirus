@@ -6,7 +6,7 @@
 #include "structures.h"
 
 #include "scene.h"
-//#include "piece.h"
+#include "piece.h"
 #include "joueur.h"
 
 
@@ -18,7 +18,23 @@ int joueurTour(Joueur desJoueurs[], int unNbrJoueurs, int unTour){
     }
 }
 
-/*
+void passeLeTour(Joueur desJoueurs[], int unNbrJoueurs, int *uneMain, Case uneScene[LIGNE_S][COLONNE_S], String *unMessage){
+    do{
+        if(desJoueurs[*uneMain].estFini){
+            if(desJoueurs[*uneMain].sonScore>0)
+                //unMessage += '[' + desJoueurs[uneMain].sonNom + "] A deja pose toutes ses pieces !\n";
+                sprintf(*unMessage, "%s[%s] A deja pose toutes ses pieces !\n", *unMessage, desJoueurs[*uneMain].sonNom );
+            else
+                //unMessage += '[' + desJoueurs[uneMain].sonNom + "] Passe son tour il est bloque !\n";
+                sprintf(*unMessage, "%s[%s] Passe son tour il est bloque !\n", *unMessage, desJoueurs[*uneMain].sonNom );
+            changeTour(desJoueurs, unNbrJoueurs);
+            *uneMain = joueurTour(desJoueurs, unNbrJoueurs, 0);
+            peutJouer(desJoueurs[*uneMain], uneScene);
+        }else
+            peutJouer(desJoueurs[*uneMain], uneScene);
+    }while(desJoueurs[*uneMain].estFini); //Vraiment utile ?
+}
+
 
 void changeTour(Joueur desJoueurs[], int unNbrJoueurs){
     int leTour;
@@ -36,8 +52,9 @@ void changeTour(Joueur desJoueurs[], int unNbrJoueurs){
 
 
 
-bool peutJouer(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S]){
-    bool peutJouer(false);
+bool peutJouer(Joueur unJoueur, Case uneScene[LIGNE_S][COLONNE_S]){
+  /*
+    bool peutJouer = false;
     for(int laPieceI = 0; laPieceI < NBR_PIECES && !peutJouer; laPieceI++){
         Piece laPiece = unJoueur.sesPieces[laPieceI];
         peutJouer = false;
@@ -56,23 +73,90 @@ bool peutJouer(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S]){
     }
     unJoueur.estFini = !peutJouer;
     return peutJouer;
+    */
+    return true;
 }
 
-void passeLeTour(Joueur desJoueurs[], int unNbrJoueurs, int &uneMain, Case uneScene[LIGNE_S][COLONNE_S], std::string &unMessage){
-    do{
-        if(desJoueurs[uneMain].estFini){
-            if(desJoueurs[uneMain].sonScore>0)
-                unMessage += '[' + desJoueurs[uneMain].sonNom + "] A deja pose toutes ses pieces !\n";
+
+
+bool jouer(Joueur* unJoueur,String * uneCommande ,Case uneScene[LIGNE_S][COLONNE_S]){
+    int lePlacement[3] = {-1};
+    bool estCorrect = true;
+    String lesRotations = str_new("");
+
+    printf("Veuillez entrer une sequence de la forme 12rrh3vR8 : \n" );
+    scanf("%s", *uneCommande);
+
+    if((*uneCommande)[0] == '\0')
+        estCorrect = false;
+    else{
+        analyser(*uneCommande, &lesRotations, lePlacement);
+        estCorrect = executer(lesRotations, (*unJoueur).sesPieces);
+
+
+        int laPiece = lePlacement[0];
+        int laLigne = lePlacement[1]+2;
+        int laColonne = lePlacement[2]+1;
+
+        if(estCorrect && laPiece >= 0 && laPiece < NBR_PIECES){
+            if((*unJoueur).sesPieces[laPiece].estDispo == true)
+                //estCorrect = estPlacable(unJoueur.sesPieces[laPiece], uneScene, laLigne, laColonne);
+                estCorrect = true;
             else
-                unMessage += '[' + desJoueurs[uneMain].sonNom + "] Passe son tour il est bloque !\n";
-            changeTour(desJoueurs, unNbrJoueurs);
-            uneMain = joueurTour(desJoueurs, unNbrJoueurs, 0);
-            peutJouer(desJoueurs[uneMain], uneScene);
+                estCorrect = false;
         }else
-            peutJouer(desJoueurs[uneMain], uneScene);
+            estCorrect = false;
 
-    }while(desJoueurs[uneMain].estFini);
+        if(estCorrect){
+            placer((*unJoueur).sesPieces[laPiece], uneScene, laLigne, laColonne);
+            (*unJoueur).sesPieces[laPiece].estDispo = false;
+            (*unJoueur).sesPieces[laPiece].saPosition = (laColonne-1) + (laLigne-2)*DIM;
+            //ajoutScore(unJoueur, unJoueur.sesPieces[laPiece].sonNbrCases);
+        }
+    }
+
+    str_delete(lesRotations);
+    return estCorrect;
 }
+
+
+void analyser(String uneCommande, String *desRotations, int unPlacement[3]){
+    char leChar;
+    String leNombreStr = str_new("");
+    int leNombre = -1;
+    int leIndex = 0;
+    bool estFin = false;
+
+    do{
+        leChar = uneCommande[leIndex++];
+
+        if(leChar >= '0' && leChar <= '9' ){
+            //On récupere le nombre
+            sprintf(leNombreStr, "%s%c", leNombreStr, leChar);
+            sscanf(leNombreStr, "%d", &leNombre);
+            leNombre--;
+        }else{
+            if (leChar == 'v' || leChar == 'h' || leChar == 'r' && unPlacement[0] == -1 && leNombre >=0){
+                sprintf(*desRotations, "%s%d%c", *desRotations, leNombre, leChar);
+            }else if(leChar >= 'A' && leChar < 'A' + DIM && unPlacement[0] == -1){
+                unPlacement[0] = leNombre;
+                unPlacement[1] = leChar - 'A';
+                leNombre = -1;
+
+            }else{
+                unPlacement[2] = leNombre;
+                estFin = true;
+            }
+            sprintf(leNombreStr, "");
+        }
+
+    }while(leChar != '\0' && !estFin);
+
+    str_delete(leNombreStr);
+
+}
+/*
+
 
 bool estFini(Joueur desJoueurs[],int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]){
     bool estFini(true);
@@ -93,76 +177,7 @@ bool aEncorePiece(Joueur & unJoueur){
     return aUnePiece;
 }
 
-bool jouer(Joueur &unJoueur,std::string &uneCommande ,Case uneScene[LIGNE_S][COLONNE_S]){
-    int lePlacement[3] = {-1};
-    bool estCorrect(true);
-    std::string lesRotations("");
 
-    std::cout<<"Veuillez entrer une sequence de la forme 12rrh3vR8 : ";
-    std::getline(std::cin,uneCommande);
-
-    if(uneCommande == "")
-        estCorrect = false;
-    else{
-        analyser(uneCommande, lesRotations, lePlacement);
-        estCorrect = executer(lesRotations, unJoueur.sesPieces);
-
-        int laPiece(lePlacement[0]);
-        int laLigne(lePlacement[1]+2);
-        int laColonne(lePlacement[2]+1);
-
-        if(estCorrect && laPiece >= 0 && laPiece < NBR_PIECES){
-            if(unJoueur.sesPieces[laPiece].estDispo == true)
-                estCorrect = estPlacable(unJoueur.sesPieces[laPiece], uneScene, laLigne, laColonne);
-            else
-                estCorrect = false;
-        }else
-            estCorrect = false;
-
-        if(estCorrect){
-            placer(unJoueur.sesPieces[laPiece], uneScene, laLigne, laColonne);
-            unJoueur.sesPieces[laPiece].estDispo = false;
-            unJoueur.sesPieces[laPiece].saPosition = (laColonne-1) + (laLigne-2)*DIM;
-            ajoutScore(unJoueur, unJoueur.sesPieces[laPiece].sonNbrCases);
-        }
-    }
-    return estCorrect;
-}
-
-void analyser(std::string &uneCommande, std::string &desRotations, int unPlacement[3]){
-    char leChar;
-    std::string leNombreStr("");
-    int leNombre(-1);
-    int leIndex = 0;
-    bool estFin = false;
-
-    do{
-        leChar = uneCommande[leIndex++];
-
-        if(leChar >= '0' && leChar <= '9' ){
-            //On récupere le nombre
-            leNombreStr += leChar;
-            leNombre = std::stoi(leNombreStr);
-            leNombre--;
-        }else{
-            if (leChar == 'v' || leChar == 'h' || leChar == 'r' && unPlacement[0] == -1 && leNombre >=0){
-                desRotations += std::to_string(leNombre) + leChar;
-
-            }else if(leChar >= 'A' && leChar < 'A' + DIM && unPlacement[0] == -1){
-                unPlacement[0] = leNombre;
-                unPlacement[1] = leChar - 'A';
-                leNombre = -1;
-
-            }else{
-                unPlacement[2] = leNombre;
-                estFin = true;
-            }
-            leNombreStr = "";
-        }
-
-    }while(leChar != '\0' && !estFin);
-
-}
 
 void ajoutScore(Joueur &unJoueur, int unNombre){
     if(!aEncorePiece(unJoueur)){
