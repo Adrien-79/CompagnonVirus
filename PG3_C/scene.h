@@ -38,7 +38,7 @@ void placer(Piece unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int
   * \param uneColonne [in] la colonne de la scene ou l'on veut tester la piece
   * \return true si la piece peut être placer sinon false.
   */
-//bool estPlacable(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne);
+bool estPlacable(Piece unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne);
 
 /*!
  * \brief Ecrit une chaine de caractere dans la scene
@@ -55,5 +55,5 @@ void ecrireMot(String unMot,Case uneScene[LIGNE_S][COLONNE_S] ,int uneLigne, int
  * \param unNbrJoueurs [in] le nombre de joueur a afficher
  * \param uneScene [out] la scene
  */
-//void putScore(Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]);
+void putScore(Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]);
 #endif // SCENE_H

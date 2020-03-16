@@ -12,7 +12,7 @@
  * \param desJoueurs [in] tous les joueurs
  * \param unNbrJoueurs [in] le nombre de joueurs dans la partie
  */
-void jouerBot(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S], Joueur desJoueurs[], int unNbrJoueurs);
+void jouerBot(Joueur *unJoueur, Case uneScene[LIGNE_S][COLONNE_S], Joueur desJoueurs[], int unNbrJoueurs);
 
 /*!
  * \brief Fonction permetant d'évaluer la qualité d'un coup (une piece, des coordonées) en fonction de plusieurs calculs
@@ -24,7 +24,7 @@ void jouerBot(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S], Joueur desJou
  * \param unNbrJoueurs [in] le nombre de joueurs en jeu
  * \return La valeur de la qualité du coup évalué
  */
-long evaluerCoup(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne, Joueur desJoueurs[], int unNbrJoueurs);
+long evaluerCoup(Piece unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne, Joueur desJoueurs[], int unNbrJoueurs);
 
 /*!
  * \brief Fonction permetant de calculer la distance minimum entre une piece et le centre du plateau
@@ -34,7 +34,7 @@ long evaluerCoup(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLign
  * \param uneColonne [in] coordonée de la colonne de la piece
  * \return La distance minimum entre la piece et le centre du plateau
  */
-int distanceCentreMin(Piece &unePiece, int uneLigne, int uneColonne);
+int distanceCentreMin(Piece unePiece, int uneLigne, int uneColonne);
 
 /*!
  * \brief Fonction permetant de calculer la distance minimum entre une piece et la piece adverse la plus proche
@@ -43,7 +43,7 @@ int distanceCentreMin(Piece &unePiece, int uneLigne, int uneColonne);
  * \param uneColonne [in] coordonée de la colonne de la piece
  * \return La distance minimum entre une piece et la piece adverse la plus proche
  */
-int distancePiecesMin(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne);
+int distancePiecesMin(Piece unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne);
 
 /*!
  * \brief Fonction permetant de calculer, pour une piece, le nombre de combinaisons de pieces adverses bloquées avec cette piece
@@ -55,6 +55,6 @@ int distancePiecesMin(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int un
  * \param uneScene [in] la scene du jeu
  * \return Le nombre de combinaisons de pieces adverses bloquées avec la piece
  */
-int piecesBloquees(Piece &unePiece, int uneLigne, int uneColonne, Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]);
+int piecesBloquees(Piece unePiece, int uneLigne, int uneColonne, Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]);
 
 #endif // BOT_H

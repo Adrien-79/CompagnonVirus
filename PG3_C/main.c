@@ -13,13 +13,13 @@
 #include "affichage.h"
 #include "scene.h"
 #include "joueur.h"
+#include "bot.h"
 
 /**
 
 #include "piece.h"
 
 #include "sauvegarde.h"
-#include "bot.h"
 **/
 
 int main(){
@@ -65,7 +65,7 @@ int main(){
         passeLeTour(lesJoueurs, leNbrJoueurs, &laMain, laScene, &leMessage);
 
         do{
-            //leMessageInfo = "";
+            sprintf(leMessageInfo, "");
 
             if(strcmp(laCommande, "s") == 0){
                 printf("DEMANDE_SAVE\n");
@@ -91,9 +91,9 @@ int main(){
 
 
             if(lesJoueurs[laMain].estBot){
-                //jouerBot(lesJoueurs[laMain], laScene, lesJoueurs, leNbrJoueurs);
-                //aJouer = true;
-                //std::cout<<std::endl;
+                jouerBot(&lesJoueurs[laMain], laScene, lesJoueurs, leNbrJoueurs);
+                aJouer = true;
+                printf("\n");
             }else
                 aJouer = jouer(&lesJoueurs[laMain], &laCommande,laScene);
 
@@ -101,8 +101,8 @@ int main(){
 
         }while(!aJouer);
 
-        //changeTour(lesJoueurs, leNbrJoueurs);
-        //laFin = estFini(lesJoueurs, leNbrJoueurs, laScene);
+        changeTour(lesJoueurs, leNbrJoueurs);
+        laFin = estFini(lesJoueurs, leNbrJoueurs, laScene);
 
     }while(!laFin);
 
@@ -110,14 +110,14 @@ int main(){
     //sauvegarder(lesJoueurs, leNbrJoueurs, laScene, leFichierS);
 
 
-    //calculeScore(lesJoueurs, leNbrJoueurs);
-    //clearPieces(laScene);
-    //putScore(lesJoueurs, leNbrJoueurs, laScene);
-    //afficher(laScene);
+    calculeScore(lesJoueurs, leNbrJoueurs);
+    clearPieces(laScene);
+    putScore(lesJoueurs, leNbrJoueurs, laScene);
+    afficher(laScene);
 
     str_delete(leFichierP);
     str_delete(leFichierS);
     str_delete(leMessage);
-    str_delete(leMessageInfo);
+    //str_delete(leMessageInfo);
     return 0;
 }

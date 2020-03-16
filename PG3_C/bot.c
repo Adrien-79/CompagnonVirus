@@ -1,6 +1,6 @@
-#include <iostream>
+#include <stdio.h>
 #include <math.h>
-
+#include "string.h"
 #include "enum.h"
 #include "constantes.h"
 #include "structures.h"
@@ -11,9 +11,9 @@
 #include "bot.h"
 
 
-void jouerBot(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S], Joueur desJoueurs[], int unNbrJoueurs){
+void jouerBot(Joueur *unJoueur, Case uneScene[LIGNE_S][COLONNE_S], Joueur desJoueurs[], int unNbrJoueurs){
     int laPiece;
-    bool peutJouer(false);
+    bool peutJouer = false;
 
     long laValeur;
 
@@ -24,43 +24,43 @@ void jouerBot(Joueur &unJoueur, Case uneScene[LIGNE_S][COLONNE_S], Joueur desJou
     int laRotationMax;
 
     for(laPiece = 0; laPiece < NBR_PIECES; laPiece++){
-        if(unJoueur.sesPieces[laPiece].estDispo){
+        if(unJoueur->sesPieces[laPiece].estDispo){
             for(int laRot = 0; laRot < 2; laRot++){
                 for(int laRotB = 0; laRotB < 4; laRotB++){
                     for(int laLigne = 2; laLigne < DIM+2; laLigne++){
                         for(int laColonne = 1; laColonne < DIM+1; laColonne++){
-                            peutJouer = estPlacable(unJoueur.sesPieces[laPiece], uneScene, laLigne, laColonne);
+                            peutJouer = estPlacable(unJoueur->sesPieces[laPiece], uneScene, laLigne, laColonne);
                             if(peutJouer){
-                                laValeur = evaluerCoup(unJoueur.sesPieces[laPiece], uneScene, laLigne, laColonne, desJoueurs, unNbrJoueurs);
+                                laValeur = evaluerCoup(unJoueur->sesPieces[laPiece], uneScene, laLigne, laColonne, desJoueurs, unNbrJoueurs);
                                 if(laValeur > laValeurMax){
                                     laValeurMax = laValeur;
                                     laPieceMax = laPiece;
                                     laLigneMax = laLigne;
                                     laColonneMax = laColonne;
-                                    laRotationMax = unJoueur.sesPieces[laPiece].saRotation;
+                                    laRotationMax = unJoueur->sesPieces[laPiece].saRotation;
                                 }
                             }
                         }
                     }
-                    rotation(unJoueur.sesPieces[laPiece]);
+                    rotation(&unJoueur->sesPieces[laPiece]);
                 }
-                vertical(unJoueur.sesPieces[laPiece]);
+                vertical(&unJoueur->sesPieces[laPiece]);
             }
         }
     }
 
 
-    setRotation(unJoueur.sesPieces[laPieceMax], laRotationMax);
-    placer(unJoueur.sesPieces[laPieceMax], uneScene, laLigneMax, laColonneMax);
-    unJoueur.sesPieces[laPieceMax].saPosition = (laColonneMax) + (laLigneMax-2)*DIM;
-    unJoueur.sesPieces[laPieceMax].estDispo = false;
-    ajoutScore(unJoueur, unJoueur.sesPieces[laPieceMax].sonNbrCases);
+    setRotation(&unJoueur->sesPieces[laPieceMax], laRotationMax);
+    placer(unJoueur->sesPieces[laPieceMax], uneScene, laLigneMax, laColonneMax);
+    unJoueur->sesPieces[laPieceMax].saPosition = (laColonneMax) + (laLigneMax-2)*DIM;
+    unJoueur->sesPieces[laPieceMax].estDispo = false;
+    ajoutScore(unJoueur, unJoueur->sesPieces[laPieceMax].sonNbrCases);
 
 }
 
 
-long evaluerCoup(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne, Joueur desJoueurs[], int unNbrJoueurs){
-    long laSomme(0);
+long evaluerCoup(Piece unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne, Joueur desJoueurs[], int unNbrJoueurs){
+    long laSomme = 0;
     int laDistanceP = 100/distancePiecesMin(unePiece, uneScene, uneLigne, uneColonne);
     int laDistanceC = 200/distanceCentreMin(unePiece, uneLigne, uneColonne);
     int lesCoins = 1000*piecesBloquees(unePiece, uneLigne, uneColonne, desJoueurs, unNbrJoueurs, uneScene);
@@ -72,7 +72,7 @@ long evaluerCoup(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLign
 }
 
 
-int distanceCentreMin(Piece &unePiece, int uneLigne, int uneColonne){
+int distanceCentreMin(Piece unePiece, int uneLigne, int uneColonne){
     int laDistanceMin = 400;
     int laDistance;
     int leCentre = DIM/2;
@@ -90,7 +90,7 @@ int distanceCentreMin(Piece &unePiece, int uneLigne, int uneColonne){
 }
 
 
-int distancePiecesMin(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne){
+int distancePiecesMin(Piece unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne){
     int laDistanceMin = pow(DIM,2)*2;
     int laDistance;
     for(int laLigne = 2; laLigne < DIM+2; laLigne++){
@@ -112,7 +112,7 @@ int distancePiecesMin(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int un
 }
 
 
-int piecesBloquees(Piece &unePiece, int uneLigne, int uneColonne, Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]){
+int piecesBloquees(Piece unePiece, int uneLigne, int uneColonne, Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]){
     int laLigne;
     int laColonne;
     int leNbrCoins = 0;
@@ -133,9 +133,9 @@ int piecesBloquees(Piece &unePiece, int uneLigne, int uneColonne, Joueur desJoue
                                                 if(estPlacable(desJoueurs[leJoueur].sesPieces[laPiece], uneScene, laLigne - laLignePJ, laColonne - laColonnePJ))
                                                     leNbrCoins++;
                                             }
-                                            rotation(desJoueurs[leJoueur].sesPieces[laPiece]);
+                                            rotation(&desJoueurs[leJoueur].sesPieces[laPiece]);
                                         }
-                                        vertical(desJoueurs[leJoueur].sesPieces[laPiece]);
+                                        vertical(&desJoueurs[leJoueur].sesPieces[laPiece]);
                                     }
                                 }
                             }

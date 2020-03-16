@@ -53,8 +53,6 @@ void rotation(Piece* unePiece){
     leTemp = (*unePiece).saRotation;
     vertical(unePiece);
     (*unePiece).saRotation = (leTemp+1)%4+4*(leTemp>=4); //Formule magique
-
-
 }
 
 

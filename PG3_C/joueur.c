@@ -29,9 +29,9 @@ void passeLeTour(Joueur desJoueurs[], int unNbrJoueurs, int *uneMain, Case uneSc
                 sprintf(*unMessage, "%s[%s] Passe son tour il est bloque !\n", *unMessage, desJoueurs[*uneMain].sonNom );
             changeTour(desJoueurs, unNbrJoueurs);
             *uneMain = joueurTour(desJoueurs, unNbrJoueurs, 0);
-            peutJouer(desJoueurs[*uneMain], uneScene);
+            peutJouer(&desJoueurs[*uneMain], uneScene);
         }else
-            peutJouer(desJoueurs[*uneMain], uneScene);
+            peutJouer(&desJoueurs[*uneMain], uneScene);
     }while(desJoueurs[*uneMain].estFini); //Vraiment utile ?
 }
 
@@ -52,11 +52,10 @@ void changeTour(Joueur desJoueurs[], int unNbrJoueurs){
 
 
 
-bool peutJouer(Joueur unJoueur, Case uneScene[LIGNE_S][COLONNE_S]){
-  /*
+bool peutJouer(Joueur* unJoueur, Case uneScene[LIGNE_S][COLONNE_S]){
     bool peutJouer = false;
     for(int laPieceI = 0; laPieceI < NBR_PIECES && !peutJouer; laPieceI++){
-        Piece laPiece = unJoueur.sesPieces[laPieceI];
+        Piece laPiece = unJoueur->sesPieces[laPieceI];
         peutJouer = false;
         if(laPiece.estDispo){
             for(int laRot = 0; laRot < 2 && !peutJouer; laRot++){
@@ -65,16 +64,14 @@ bool peutJouer(Joueur unJoueur, Case uneScene[LIGNE_S][COLONNE_S]){
                         for(int laColonne = 1; laColonne < DIM+1 && !peutJouer; laColonne++)
                             peutJouer = estPlacable(laPiece, uneScene, laLigne, laColonne);
                     }
-                    rotation(laPiece);
+                    rotation(&laPiece);
                 }
-                vertical(laPiece);
+                vertical(&laPiece);
             }
         }
     }
-    unJoueur.estFini = !peutJouer;
+    unJoueur->estFini = !peutJouer;
     return peutJouer;
-    */
-    return true;
 }
 
 
@@ -91,7 +88,7 @@ bool jouer(Joueur* unJoueur,String * uneCommande ,Case uneScene[LIGNE_S][COLONNE
         estCorrect = false;
     else{
         analyser(*uneCommande, &lesRotations, lePlacement);
-        estCorrect = executer(lesRotations, (*unJoueur).sesPieces);
+        estCorrect = executer(lesRotations, unJoueur->sesPieces);
 
 
         int laPiece = lePlacement[0];
@@ -99,19 +96,18 @@ bool jouer(Joueur* unJoueur,String * uneCommande ,Case uneScene[LIGNE_S][COLONNE
         int laColonne = lePlacement[2]+1;
 
         if(estCorrect && laPiece >= 0 && laPiece < NBR_PIECES){
-            if((*unJoueur).sesPieces[laPiece].estDispo == true)
-                //estCorrect = estPlacable(unJoueur.sesPieces[laPiece], uneScene, laLigne, laColonne);
-                estCorrect = true;
+            if(unJoueur->sesPieces[laPiece].estDispo == true)
+                estCorrect = estPlacable(unJoueur->sesPieces[laPiece], uneScene, laLigne, laColonne);
             else
                 estCorrect = false;
         }else
             estCorrect = false;
 
         if(estCorrect){
-            placer((*unJoueur).sesPieces[laPiece], uneScene, laLigne, laColonne);
-            (*unJoueur).sesPieces[laPiece].estDispo = false;
-            (*unJoueur).sesPieces[laPiece].saPosition = (laColonne-1) + (laLigne-2)*DIM;
-            //ajoutScore(unJoueur, unJoueur.sesPieces[laPiece].sonNbrCases);
+            placer(unJoueur->sesPieces[laPiece], uneScene, laLigne, laColonne);
+            unJoueur->sesPieces[laPiece].estDispo = false;
+            unJoueur->sesPieces[laPiece].saPosition = (laColonne-1) + (laLigne-2)*DIM;
+            ajoutScore(unJoueur, unJoueur->sesPieces[laPiece].sonNbrCases);
         }
     }
 
@@ -155,23 +151,21 @@ void analyser(String uneCommande, String *desRotations, int unPlacement[3]){
     str_delete(leNombreStr);
 
 }
-/*
 
 
-bool estFini(Joueur desJoueurs[],int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]){
-    bool estFini(true);
-    for(int leJoueur = 0; leJoueur < unNbrJoueurs && estFini; leJoueur++){
-        if(!desJoueurs[leJoueur].estFini){
-            peutJouer(desJoueurs[leJoueur], uneScene);
-            estFini = desJoueurs[leJoueur].estFini;
-
-        }
+void ajoutScore(Joueur *unJoueur, int unNombre){
+    if(!aEncorePiece(*unJoueur)){
+        if(unNombre == 1)
+            unJoueur->sonScore += 20;
+        else
+            unJoueur->sonScore += 15;
+        unJoueur->estFini = true;
     }
-    return estFini;
 }
 
-bool aEncorePiece(Joueur & unJoueur){
-    bool aUnePiece(false);
+
+bool aEncorePiece(Joueur unJoueur){
+    bool aUnePiece = false;
     for(int laPiece = 0; laPiece < NBR_PIECES && !aUnePiece; laPiece++)
         aUnePiece = unJoueur.sesPieces[laPiece].estDispo;
     return aUnePiece;
@@ -179,15 +173,18 @@ bool aEncorePiece(Joueur & unJoueur){
 
 
 
-void ajoutScore(Joueur &unJoueur, int unNombre){
-    if(!aEncorePiece(unJoueur)){
-        if(unNombre == 1)
-            unJoueur.sonScore += 20;
-        else
-            unJoueur.sonScore += 15;
-        unJoueur.estFini = true;
+bool estFini(Joueur desJoueurs[],int unNbrJoueurs, Case uneScene[LIGNE_S][COLONNE_S]){
+    bool estFini = true;
+    for(int leJoueur = 0; leJoueur < unNbrJoueurs && estFini; leJoueur++){
+        if(!desJoueurs[leJoueur].estFini){
+            peutJouer(&desJoueurs[leJoueur], uneScene);
+            estFini = desJoueurs[leJoueur].estFini;
+
+        }
     }
+    return estFini;
 }
+
 
 void calculeScore(Joueur desJoueurs[], int unNbrJoueurs){
     for(int leJoueur = 0; leJoueur < unNbrJoueurs; leJoueur++){
@@ -199,12 +196,12 @@ void calculeScore(Joueur desJoueurs[], int unNbrJoueurs){
 }
 
 
-int max(Joueur desJoueurs[], int desJoueursTri[], int &unIndexMax){
+int max(Joueur desJoueurs[], int desJoueursTri[], int *unIndexMax){
     int leJoueur;
     int leJoueurMax;
     int leScoreMax = desJoueurs[desJoueursTri[0]].sonScore;
     int lIndexScoreMax;
-    for(int lIndex = 0; lIndex <= unIndexMax; lIndex++){
+    for(int lIndex = 0; lIndex <= *unIndexMax; lIndex++){
         leJoueur = desJoueursTri[lIndex];
         if(desJoueurs[leJoueur].sonScore >= leScoreMax){
             leScoreMax = desJoueurs[leJoueur].sonScore;
@@ -212,8 +209,6 @@ int max(Joueur desJoueurs[], int desJoueursTri[], int &unIndexMax){
         }
     }
     leJoueurMax = desJoueursTri[lIndexScoreMax];
-    desJoueursTri[lIndexScoreMax] = desJoueursTri[unIndexMax--];
+    desJoueursTri[lIndexScoreMax] = desJoueursTri[(*unIndexMax)--];
     return leJoueurMax;
 }
-
-*/

@@ -77,10 +77,10 @@ void placer(Piece unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int
     }
 }
 
-/*
-bool estPlacable(Piece &unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne){
-    bool aUnCoin(false);
-    bool estPlacable(true);
+
+bool estPlacable(Piece unePiece, Case uneScene[LIGNE_S][COLONNE_S], int uneLigne, int uneColonne){
+    bool aUnCoin = false;
+    bool estPlacable = true;
     char leChar;
 
 
@@ -125,25 +125,24 @@ void putScore(Joueur desJoueurs[], int unNbrJoueurs, Case uneScene[LIGNE_S][COLO
     int lIndexMax = unNbrJoueurs-1;
 
 
-
-    std::string laString("-============- SCORE -============-");
+    String laString = str_new("-============- SCORE -============-");
 
     ecrireMot(laString, uneScene, 6, DIM+10);
-    laString = "-=================================-";
+    sprintf(laString, "-=================================-");
     ecrireMot(laString, uneScene, unNbrJoueurs*2+8, DIM+10);
 
     for(int lIndex = 0; lIndex < unNbrJoueurs; lIndex++){
-        leJoueur = max(desJoueurs, lesJoueursTri, lIndexMax);
+        leJoueur = max(desJoueurs, lesJoueursTri, &lIndexMax);
 
         laLigne = 8+(lIndex*2);
         laColonne = DIM+15;
 
         uneScene[laLigne][laColonne].saCouleur = desJoueurs[leJoueur].sesPieces[0].saCouleur;
         ecrireMot(desJoueurs[leJoueur].sonNom, uneScene, laLigne, laColonne+2);
-        laString = ": "+std::to_string(desJoueurs[leJoueur].sonScore);
+        sprintf(laString, ": %d", desJoueurs[leJoueur].sonScore);
         ecrireMot(laString, uneScene, laLigne, laColonne+15);
     }
 
-}
+    str_delete(laString);
 
-*/
+}
