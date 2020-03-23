@@ -22,6 +22,9 @@
 
     GtkAllocation* allocationImage = NULL;
 
+    float maxW = 400;
+    float maxH = 400;
+
     int string_end_with(const char *str, const char *end){
       size_t len_str = strlen(str);
       size_t len_end = strlen(end);
@@ -30,13 +33,6 @@
     }
 
     void display_image(const char * url){
-      GtkAllocation* alloc = g_new(GtkAllocation, 1);
-      gtk_widget_get_allocation(GTK_WIDGET(imageViewer), alloc);
-      float maxW = alloc->width -100;
-      float maxH = alloc->height -100;
-      g_free(alloc);
-
-
 
       GdkPixbuf* pixbuffer = gdk_pixbuf_new_from_file(url, NULL);
       float preW = gdk_pixbuf_get_width(pixbuffer);
@@ -49,18 +45,21 @@
 
       int newW = preW*ratio;
       int newH = preH*ratio;
-
       pixbuffer = gdk_pixbuf_scale_simple(pixbuffer,newW, newH,GDK_INTERP_BILINEAR);
       gtk_image_set_from_pixbuf(imageViewer, pixbuffer);
     }
 
 
     void clear_list_medias(){
+      if(mediaList != NULL){
+        printf("%s\n","CLEAR" );
+        for(int i = 0; i < nbrMedia; i++)
+          free(mediaList[i]);
 
-      for(int i = 0; i < nbrMedia; i++)
-        free(mediaList[i]);
-
-      free(mediaList);
+        free(mediaList);
+        mediaList = NULL;
+      }
+      curIndex = 0;
     }
 
 
@@ -78,9 +77,9 @@
 
 
     void update_files(const char* homedir){
-      if(mediaList){
-        clear_list_medias();
-      }
+      nbrMedia = 0;
+      clear_list_medias();
+
 
 
       int ind = 0;
@@ -92,18 +91,20 @@
         ind++;
       }
 
-      void add_func(char * c) {nbrMedia++;}
+      int mediaIndTemp = 0; // On modifie mediaIndTemp et non pas nbmedia car crash si update viewr
+      void add_func(char * c) {mediaIndTemp++;}
 
 
-      nbrMedia = 0;
       execute_parcours_fichier(homedir,add_func);
-      mediaList =(char**) malloc(sizeof(char *) * nbrMedia );
+      mediaList =(char**) malloc(sizeof(char *) * mediaIndTemp );
       execute_parcours_fichier(homedir, url_add_func);
 
       char *urlDisplay = (char*)malloc(sizeof(char * )*256);
-      sprintf(urlDisplay, "%s/       : %d medias\n", homedir, nbrMedia );
+      sprintf(urlDisplay, "%s/       : %d medias\n", homedir, mediaIndTemp );
       gtk_label_set_text(labelURL, urlDisplay );
       free(urlDisplay);
+
+      nbrMedia = mediaIndTemp;
     }
 
 
@@ -157,9 +158,21 @@
 
 
 
-    void update_size(GtkWidget *widget, GtkAllocation *allocation, void *data) {
-      if(nbrMedia>0){
-        display_image(mediaList[curIndex]);
+    void update_size(GtkWidget *widget, GdkEvent *event, void *data) {
+      GtkAllocation* alloc = g_new(GtkAllocation, 1);
+      gtk_widget_get_allocation(mainWindow, alloc);
+
+      //printf("%f %f \n",maxW, maxH );
+      float maxWTemp = alloc->width -350.0;
+      float maxHTemp = alloc->height  -350.0;
+
+      g_free(alloc);
+      if(maxH != maxHTemp || maxW != maxWTemp){
+        maxH = maxHTemp;
+        maxW = maxWTemp;
+        if(nbrMedia>0){
+          display_image(mediaList[curIndex]);
+        }
       }
     }
 
@@ -201,7 +214,7 @@
       g_signal_connect(buttonSuivant, "clicked", G_CALLBACK(suivant), NULL);
       g_signal_connect(buttonRepertoire, "clicked", G_CALLBACK(change_repertoire), NULL);
 
-      g_signal_connect(imageViewer, "size-allocate", G_CALLBACK(update_size), NULL);
+       g_signal_connect(G_OBJECT(mainWindow), "size-allocate", G_CALLBACK(update_size), NULL);
 
 
     }
