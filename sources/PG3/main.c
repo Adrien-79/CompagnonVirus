@@ -25,7 +25,7 @@
 int main(){
 
     srand(time(NULL));
-    String leFichierP = str_new(".pieces.txt");
+    String leFichierP = str_new("./pieces.txt");
     String leFichierS = str_new("");
 
     String leMessage = str_new("");
