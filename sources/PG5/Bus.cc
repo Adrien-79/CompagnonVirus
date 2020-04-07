@@ -557,7 +557,6 @@ void Bus::run()
             
             //CAPING FRAME RATE
             if(newFrame){
-                std::cout<<"newframe"<<std::endl;
                 postTick = SDL_GetTicks();
                 durationTick = postTick - preTick;
                 if(durationTick < SCREEN_TICKS_PER_FRAME){
