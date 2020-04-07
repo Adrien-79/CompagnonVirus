@@ -14,4 +14,10 @@ cd ../PG2/
 printf "\n"
 cd ../PG3/
 ./compilation.sh
+printf "\n"
+cd ../PG4/
+./compilation.sh
+printf "\n"
+cd ../PG5/
+./compilation.sh
 printf "\n\n\nSortie : ./executables/\n Fin du nettoyage des fichiers\n"

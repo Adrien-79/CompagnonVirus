@@ -5,6 +5,7 @@
 #include <string.h> 
 
 
+//Ajout d'un point (lecture depuis le fichier)
 void addPoint(FILE* file, double (* tableau)[3]){
     double x = 0;
     double y = 0;
@@ -19,17 +20,21 @@ void addPoint(FILE* file, double (* tableau)[3]){
 
 }
 
+//On ajoute une figure (triangle)
 void addShape(FILE * input, FILE * output,int MAX_POINTS ,double points[MAX_POINTS][3]){
     int pointA = 0;
     int pointB = 0;
     int pointC = 0;
 
+    //Lecture de la ligne d'un triangle (3 points)
     fscanf(input, "%d/%*d/%*d %d/%*d/%*d %d/%*d/%*d", &pointA, &pointB, &pointC);
 
-    pointA--;
+    //On décremente les valeurs pour avoir l'index (commence à 0)
+    pointA--; 
     pointB--;
     pointC--;
 
+    //On ecris au format gnuplot, dans le fichier temp
     fprintf(output, "%lf %lf %lf\n", points[pointA][0], points[pointA][1], points[pointA][2]);
     fprintf(output, "%lf %lf %lf\n", points[pointB][0], points[pointB][1], points[pointB][2]);
     fprintf(output, "\n");
@@ -38,6 +43,7 @@ void addShape(FILE * input, FILE * output,int MAX_POINTS ,double points[MAX_POIN
     fprintf(output, "\n\n");
 
 }
+
 
 int main(int argc, char *argv[])
 {
@@ -60,8 +66,6 @@ int main(int argc, char *argv[])
     int MAX_POINTS = 3000;
     double points[MAX_POINTS][3];
     int indexPoint = 0;
-
-    //scanf("%d", &N);
    
 
     FILE * obj = fopen(fichierName, "r");
@@ -70,7 +74,7 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
-    FILE * tempFile = fopen("data.temp", "w");
+    FILE * tempFile = fopen("data.temp", "w"); //Fichier temporaire pour l'affichage de gnuplot
 
 
 
@@ -88,13 +92,14 @@ int main(int argc, char *argv[])
 
 
 
-
+    //Configuration gnuplot
     FILE * gnuplotPipe = popen ("gnuplot -persistent", "w");
     fprintf(gnuplotPipe, "unset log\n");
     fprintf(gnuplotPipe, "unset border\n");
     fprintf(gnuplotPipe, "set mouse\n");
     fprintf(gnuplotPipe, "set auto\n");
 
+    //Affichage des surfaces ou non
     if(strcmp(surfaceAffichable, "1") == 0){
         fprintf(gnuplotPipe, "set hidden3d\n");
     }
@@ -109,7 +114,5 @@ int main(int argc, char *argv[])
     printf("Nombre de Points : %d\n", indexPoint);
     printf("Nombre de triangles : %d\n", totalSurfaces);
 
-
-    
     return 0;
 }

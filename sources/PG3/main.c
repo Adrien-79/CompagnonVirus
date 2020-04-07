@@ -34,8 +34,6 @@ int main(){
     String laCommande = str_new("");
 
 
-
-
     Case laScene[LIGNE_S][COLONNE_S];
     bool laFin = false;
     bool estUneSauvegarde;
@@ -43,7 +41,6 @@ int main(){
     int leNbrBots;
     int laMain;
     bool aJouer;
-
 
     estUneSauvegarde = nbrJoueurs(&leNbrJoueurs, &leNbrBots);
     Joueur lesJoueurs[4];
@@ -53,11 +50,6 @@ int main(){
 
 
     init_Joueur(lesJoueurs, leNbrJoueurs, leNbrBots,estUneSauvegarde , leFichierP);
-
-
-    //if(estUneSauvegarde)
-        //charger(lesJoueurs, leNbrJoueurs, laScene, leFichierP, leFichierS);
-
 
     do{
         str_set(&leMessage, "\n");
@@ -73,7 +65,7 @@ int main(){
             }else if(strcmp(laCommande, "l") == 0){
                 //demandeCharger(lesJoueurs, leNbrJoueurs, laScene, leFichierP, leFichierS, leMessageInfo, laMain);
                 printf("Demande Charger\n");
-            }else if(strcmp(laCommande,"/auto") == 0){
+            }else if(strcmp(laCommande,"/auto") == 0){ //cheat mode !
                 for(int i = 0; i<leNbrJoueurs; i++)
                     lesJoueurs[i].estBot = true;
             }
