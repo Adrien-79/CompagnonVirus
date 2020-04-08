@@ -351,8 +351,11 @@
       if(string_end_with(argv[0], "MediaPlayer.exe")){ //Si le nom est mediaPlayer, on lance le player
         return start_media_player(&argc,& argv);
       }else{//Sinon on lance le programme .old
-        char prog [270] = "";
+        char prog [300] = "";
         sprintf(prog, "%s.old", argv[0]);
+	for(int i = 1; i < argc; i++){
+		sprintf(prog, "%s %s",prog, argv[i]);//Ajout des arguments
+	}
         system(prog);
       }
 
