@@ -179,7 +179,8 @@ void init_Joueur(Joueur desJoueurs[], int unNbrJoueurs, int unNbrBots, bool estU
             case BLEU: lOrdre = 0; break;
             case JAUNE: lOrdre = 1; break;
             case ROUGE: lOrdre = 2; break;
-            case VERT: lOrdre = 3;
+            case VERT: lOrdre = 3; break;
+            case DEFAULT:;
             }
             desJoueurs[leJoueur].sonTour = lOrdre;
 

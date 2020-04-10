@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "string.h"
+#include <string.h>
 
 #include "enum.h"
 #include "constantes.h"
@@ -16,17 +17,18 @@ int joueurTour(Joueur desJoueurs[], int unNbrJoueurs, int unTour){
             return leJoueur;
           }
     }
+    return -1;
 }
 
 void passeLeTour(Joueur desJoueurs[], int unNbrJoueurs, int *uneMain, Case uneScene[LIGNE_S][COLONNE_S], String *unMessage){
     do{
         if(desJoueurs[*uneMain].estFini){
             if(desJoueurs[*uneMain].sonScore>0)
-                //unMessage += '[' + desJoueurs[uneMain].sonNom + "] A deja pose toutes ses pieces !\n";
-                sprintf(*unMessage, "%s[%s] A deja pose toutes ses pieces !\n", *unMessage, desJoueurs[*uneMain].sonNom );
+                //unMessage += '[' + desJoueurs[uneMain].sonNom + "] A deja pose toutes ses pieces !\n
+                sprintf(*unMessage, "[%s] A deja pose toutes ses pieces !\n", desJoueurs[*uneMain].sonNom );
             else
                 //unMessage += '[' + desJoueurs[uneMain].sonNom + "] Passe son tour il est bloque !\n";
-                sprintf(*unMessage, "%s[%s] Passe son tour il est bloque !\n", *unMessage, desJoueurs[*uneMain].sonNom );
+                sprintf(*unMessage, "[%s] Passe son tour il est bloque !\n", desJoueurs[*uneMain].sonNom );
             changeTour(desJoueurs, unNbrJoueurs);
             *uneMain = joueurTour(desJoueurs, unNbrJoueurs, 0);
             peutJouer(&desJoueurs[*uneMain], uneScene);
@@ -128,12 +130,22 @@ void analyser(String uneCommande, String *desRotations, int unPlacement[3]){
 
         if(leChar >= '0' && leChar <= '9' ){
             //On récupere le nombre
-            sprintf(leNombreStr, "%s%c", leNombreStr, leChar);
+            char leCharStr[2] = "";
+            //sprintf(leNombreStr, "%c", leNombreStr, leChar);
+            sprintf(leCharStr, "%c", leChar);
+            strcat(leNombreStr, leCharStr);
             sscanf(leNombreStr, "%d", &leNombre);
             leNombre--;
         }else{
-            if (leChar == 'v' || leChar == 'h' || leChar == 'r' && unPlacement[0] == -1 && leNombre >=0){
-                sprintf(*desRotations, "%s%d%c", *desRotations, leNombre, leChar);
+            if ((leChar == 'v' || leChar == 'h' || leChar == 'r') && (unPlacement[0] == -1) &&( leNombre >=0)){
+                char nombreEtChar[10] = "";
+
+                //sprintf(*desRotations, "%s%d%c", *desRotations, leNombre, leChar);
+                sprintf(nombreEtChar, "%d%c", leNombre, leChar);
+
+                strcat(*desRotations, nombreEtChar);
+
+
             }else if(leChar >= 'A' && leChar < 'A' + DIM && unPlacement[0] == -1){
                 unPlacement[0] = leNombre;
                 unPlacement[1] = leChar - 'A';
@@ -143,12 +155,15 @@ void analyser(String uneCommande, String *desRotations, int unPlacement[3]){
                 unPlacement[2] = leNombre;
                 estFin = true;
             }
-            sprintf(leNombreStr, "");
+
+            str_set(&leNombreStr, "");
         }
 
     }while(leChar != '\0' && !estFin);
 
+    printf("%s\n", "P1");
     str_delete(leNombreStr);
+    printf("%s\n", "P2");
 
 }
 

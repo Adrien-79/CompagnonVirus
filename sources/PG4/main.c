@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+#include <time.h>
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
@@ -136,7 +136,7 @@ Vec3 vec_cross(Vec3 a, Vec3 b)
 
 double degrees_to_radians(double a)
 {
-    return a/180.0 * M_PI; //180° = pi rad
+    return a/180.0 * M_PI; //180ï¿½ = pi rad
 }
 
 int sphere_intersect(Sphere s, Vec3 origin, Vec3 d,Vec3*inter)
@@ -336,7 +336,8 @@ Vec3 texture_sample_bilinear(unsigned char * texture, Vec3 tex, int w, int h, in
 Cubemap make_cubemap(char * path)
 {
     char * names[] = {"front.jpg","back.jpg","right.jpg","left.jpg","top.jpg","bottom.jpg"};
-    Material mat;
+    Material mat = {};
+
     Cubemap cube = {{
         {{-0.5,-0.5,0.5},{0.5,-0.5,0.5},{-0.5,0.5,0.5},mat,{0.0,1.0,0.0},{1.0,1.0,0.0},{0.0,0.0,0.0}}, //Front
         {{-0.5,0.5,0.5},{0.5,0.5,0.5},{0.5,-0.5,0.5},mat,{0.0,0.0,0.0},{1.0,0.0,0.0},{1.0,1.0,0.0}},
@@ -441,7 +442,7 @@ int objects_intersect(Vec3 origin, Vec3 view_vec,Object * objects,const int NB_O
 Vec3 launchRay(Vec3 origin, Vec3 view_vec, Object * objects, const int NB_OBJECTS, Light*lights, const int NB_LIGHTS, int iter, Cubemap skymap)
 {
     Vec3 black = {0.0, 0.0, 0.0};
-    Vec3 red = {1.0,0.0,0.0};
+    //Vec3 red = {1.0,0.0,0.0};
     Vec3 finalColor = {230,210,250};
     finalColor = vec_mul(finalColor,1.0/255.0);
     if(iter <= 0)

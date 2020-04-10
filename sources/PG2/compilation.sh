@@ -1,3 +1,3 @@
 echo 'Construction de MonPG2 ...'
-gcc -o ../../executables/MonPG2 MonPG2.c
+gcc -Wall -o ../../executables/MonPG2 MonPG2.c
 echo 'MonPG2 : '.`readlink -f ../../executables/MonPG2`

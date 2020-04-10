@@ -299,7 +299,7 @@ void Bus::run()
     int fixedDumpEnabled = 0;
     std::list<std::string> fixedDump;
     bool  dump_membp = false;
-    
+
     unsigned int preTick = 0, postTick = 0, durationTick; //Utiliser pour le caping framerate
 
     while (!over)
@@ -491,7 +491,7 @@ void Bus::run()
                         }
                         fixedDump.push_back(line.str());
 
-                        if(fixedDumpEnabled == fixedDump.size())
+                        if(fixedDumpEnabled == ((int)fixedDump.size()))
                             fixedDump.pop_front();
                     }
                     //if(nbInst >= 0xf000) over = true;
@@ -553,8 +553,8 @@ void Bus::run()
             newFrame = ppu.tick();
             tim.tick();
             cpt++;
-            
-            
+
+
             //CAPING FRAME RATE
             if(newFrame){
                 postTick = SDL_GetTicks();
@@ -564,8 +564,8 @@ void Bus::run()
                 }
                 preTick = postTick;
             }
-                      
-                
+
+
         }
         if(stopMode)
         {

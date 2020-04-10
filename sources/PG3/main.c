@@ -57,7 +57,7 @@ int main(){
         passeLeTour(lesJoueurs, leNbrJoueurs, &laMain, laScene, &leMessage);
 
         do{
-            sprintf(leMessageInfo, "");
+            leMessageInfo = "";
 
             if(strcmp(laCommande, "s") == 0){
                 printf("DEMANDE_SAVE\n");
